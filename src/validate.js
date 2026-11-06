@@ -59,7 +59,8 @@ export function normalizePoints(value, baseURI) {
     if (raw.links !== undefined && !Array.isArray(raw.links)) throw new TypeError("Invalid map links");
     const links = (raw.links ?? []).map((link) => normalizeLink(link, baseURI));
     if (raw.label !== undefined && typeof raw.label !== "string") throw new TypeError("Invalid map label");
-    const label = typeof raw.label === "string" ? raw.label.trim() : links.map((l) => l.label).join(", ");
+    const label =
+      (typeof raw.label === "string" ? raw.label.trim() : "") || links.map((l) => l.label).join(", ");
     if (!label) throw new TypeError("A map point needs a label or a link");
     return { ...coordinate, label, links };
   });

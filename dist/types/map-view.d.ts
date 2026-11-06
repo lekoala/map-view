@@ -14,3 +14,9 @@ export declare class MapViewElement extends HTMLElement {
     /** @public Explicit activation, e.g. from application-owned controls. */
     show(): void;
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "map-view": MapViewElement;
+  }
+}

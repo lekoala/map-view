@@ -10,6 +10,16 @@ const providerLoaders = new Map();
 providerLoaders.set("maplibre", () => import("./providers/maplibre.js"));
 providerLoaders.set("google", () => import("./providers/google.js"));
 
+/** Cleanup failures must not interrupt lifecycle transitions or affect newer attempts.
+ * @param {() => void} dispose */
+function disposeSafely(dispose) {
+  try {
+    dispose();
+  } catch (error) {
+    console.error("Map provider cleanup failed", error);
+  }
+}
+
 /** A small declarative, provider-neutral point map. Not a map engine. */
 export class MapViewElement extends HTMLElement {
   /** @type {AbortController | null} */
@@ -131,7 +141,7 @@ export class MapViewElement extends HTMLElement {
     this.#timer = null;
     const dispose = this.#dispose;
     this.#dispose = null;
-    dispose?.();
+    if (dispose) disposeSafely(dispose);
   }
 
   /** @param {unknown} error */
@@ -186,10 +196,6 @@ export class MapViewElement extends HTMLElement {
         language: this.closest("[lang]")?.getAttribute("lang") || document.documentElement.lang || undefined,
         region: this.getAttribute("region") ?? undefined,
       };
-      if (provider === "maplibre" && !options.mapStyle)
-        throw new TypeError("map-style is required for MapLibre");
-      if (provider === "google" && (!options.apiKey || !options.mapId))
-        throw new TypeError("Google requires api-key and map-id");
       // Timeout starts before the first dynamic import, not inside the SDK.
       this.#timer = setTimeout(() => fail(new Error("Map activation timed out")), timeout);
       const module = await loader();
@@ -198,8 +204,10 @@ export class MapViewElement extends HTMLElement {
       const mount = typeof module === "function" ? module : "mount" in module ? module.mount : module.default;
       if (typeof mount !== "function") throw new TypeError(`Provider ${provider} has no mount()`);
       const dispose = await mount({ canvas, points, center, options, signal: attempt.signal, onError: fail });
+      if (typeof dispose !== "function")
+        throw new TypeError(`Provider ${provider} must return a dispose function`);
       if (attempt.signal.aborted || this.#session !== session || this.#attempt !== attempt) {
-        dispose(); // Late resolver owns cleanup even after abort.
+        disposeSafely(dispose); // Late resolver owns cleanup even after abort.
         return;
       }
       this.#dispose = dispose;

@@ -20,7 +20,7 @@ The core is deliberately agnostic to markers implementations. It passes normaliz
 
 The authoritative identity is `(connection AbortController, attempt AbortController)`. Every asynchronous boundary checks both; stale resolutions dispose themselves and emit no events. The timer belongs to the current attempt and must never survive success or cancellation.
 
-`click` is the default and requires an open button. `visible` uses IntersectionObserver to activate near viewport and reserves a canvas box before intersection. `eager` begins automatically. All share the same `#start` path. Applications own the content and CSS of loading/error/open controls.
+`click` is the default; applications provide an open button or call `show()` from their own controls. `visible` uses IntersectionObserver to activate near viewport and reserves a canvas box before intersection. `eager` begins automatically. All share the same `#start` path. Applications own the content and CSS of loading/error/open controls.
 
 DOM shape is read at connection; point JSON/options/center are snapshotted per attempt. Mutation during active map is not a supported data-sync mechanism in 0.1. If the entire element is replaced by partial navigation, `disconnectedCallback` destroys it.
 

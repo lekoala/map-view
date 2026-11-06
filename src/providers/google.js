@@ -6,6 +6,38 @@ let loaderConfig = null;
 /** @type {Set<(error: Error) => void>} */
 const activeAuthHandlers = new Set();
 
+/** @type {(() => void) | undefined} */
+let previousAuthHandler;
+/** @type {(() => void) | null} */
+let authHook = null;
+
+/** @param {(error: Error) => void} handler */
+function subscribeAuth(handler) {
+  const host = /** @type {typeof globalThis & {gm_authFailure?: () => void}} */ (globalThis);
+  if (!authHook) {
+    previousAuthHandler = host.gm_authFailure;
+    authHook = () => {
+      const previous = previousAuthHandler;
+      for (const callback of [...activeAuthHandlers])
+        callback(new Error("Google Maps authentication failed"));
+      previous?.();
+    };
+    host.gm_authFailure = authHook;
+  }
+  activeAuthHandlers.add(handler);
+  return () => {
+    activeAuthHandlers.delete(handler);
+    if (activeAuthHandlers.size || !authHook) return;
+    // Do not overwrite a hook installed by another application in the meantime.
+    if (host.gm_authFailure === authHook) {
+      if (previousAuthHandler) host.gm_authFailure = previousAuthHandler;
+      else delete host.gm_authFailure;
+    }
+    authHook = null;
+    previousAuthHandler = undefined;
+  };
+}
+
 /** @param {{key: string, language: string | undefined, region: string | undefined}} requested @param {typeof import("@googlemaps/js-api-loader")} loader */
 function configureLoader(requested, loader) {
   if (loaderConfig) {
@@ -14,13 +46,17 @@ function configureLoader(requested, loader) {
     }
     return;
   }
+  const existing = /** @type {{google?: {maps?: {importLibrary?: unknown, Map?: unknown}}}} */ (globalThis);
+  if (
+    existing.google?.maps?.importLibrary ||
+    existing.google?.maps?.Map ||
+    [...document.scripts].some((script) =>
+      /^https:\/\/(maps\.googleapis\.com|maps\.google\.com)\/maps\/api\/js(?:\?|$)/.test(script.src),
+    )
+  ) {
+    throw new Error("Google Maps was configured outside this adapter");
+  }
   loader.setOptions({ ...requested, v: "quarterly", authReferrerPolicy: "origin" });
-  const host = /** @type {typeof globalThis & {gm_authFailure?: () => void}} */ (globalThis);
-  const previous = host.gm_authFailure;
-  host.gm_authFailure = () => {
-    for (const handler of activeAuthHandlers) handler(new Error("Google Maps authentication failed"));
-    if (typeof previous === "function") previous();
-  };
   loaderConfig = requested;
 }
 
@@ -31,7 +67,8 @@ export async function mount({ canvas, points, center, options, signal, onError }
   if (signal.aborted) return () => {};
   configureLoader({ key: options.apiKey, language: options.language, region: options.region }, loader);
   const authFailed = (/** @type {Error} */ error) => onError(error);
-  activeAuthHandlers.add(authFailed);
+  const unsubscribeAuth = subscribeAuth(authFailed);
+  const canvasStyle = canvas.getAttribute("style");
   /** @type {google.maps.Map | null} */
   let map = null;
   /** @type {google.maps.marker.AdvancedMarkerElement[]} */
@@ -44,7 +81,7 @@ export async function mount({ canvas, points, center, options, signal, onError }
     if (disposed) return;
     disposed = true;
     signal.removeEventListener("abort", abort);
-    activeAuthHandlers.delete(authFailed);
+    unsubscribeAuth();
     listeners.abort();
     popup?.close();
     for (const marker of markers) {
@@ -53,6 +90,8 @@ export async function mount({ canvas, points, center, options, signal, onError }
     }
     if (map) google.maps.event.clearInstanceListeners(map);
     canvas.replaceChildren();
+    if (canvasStyle === null) canvas.removeAttribute("style");
+    else canvas.setAttribute("style", canvasStyle);
   };
   const abort = () => dispose();
   signal.addEventListener("abort", abort, { once: true });
@@ -102,8 +141,13 @@ export async function mount({ canvas, points, center, options, signal, onError }
     const idle = () =>
       new Promise((resolve) => {
         if (!map || signal.aborted) return resolve(undefined);
-        google.maps.event.addListenerOnce(map, "idle", () => resolve(undefined));
-        signal.addEventListener("abort", () => resolve(undefined), { once: true });
+        const done = () => {
+          listener.remove();
+          signal.removeEventListener("abort", done);
+          resolve(undefined);
+        };
+        const listener = google.maps.event.addListenerOnce(map, "idle", done);
+        signal.addEventListener("abort", done, { once: true });
       });
     await idle();
     if (!signal.aborted && !center && points.length > 1 && (map.getZoom() ?? 0) > options.maxZoom) {

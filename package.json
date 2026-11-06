@@ -52,7 +52,7 @@
   },
   "peerDependencies": {
     "@googlemaps/js-api-loader": "^2.0.0",
-    "maplibre-gl": "^5.0.0 || ^6.0.0"
+    "maplibre-gl": "^6.16.0"
   },
   "peerDependenciesMeta": {
     "@googlemaps/js-api-loader": {
@@ -67,12 +67,12 @@
     "@googlemaps/js-api-loader": "^2.0.0",
     "@types/google.maps": "^3.58.0",
     "@playwright/test": "1.64.0",
-    "maplibre-gl": "^5.0.0 || ^6.0.0",
+    "maplibre-gl": "^6.16.0",
     "typescript": "7.0.2"
   },
   "scripts": {
     "dev": "node test/server.js",
-    "build:types": "tsc -p tsconfig.types.json",
+    "build:types": "tsc -p tsconfig.types.json && node scripts/complete-types.js",
     "build:manifest": "node scripts/custom-elements.js",
     "build": "bun run build:types && bun run build:manifest",
     "sync": "bun run build",

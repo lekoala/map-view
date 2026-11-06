@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/src/map-view.css">
+  <link rel="stylesheet" href="/node_modules/maplibre-gl/dist/maplibre-gl.css">
+  <style>[data-map-canvas] { height: 320px; width: 500px; }</style>
+  <script type="importmap">{"imports":{"maplibre-gl":"/test/fixtures/maplibre-sdk.js"}}</script>
+</head>
+<body>
+  <map-view provider="maplibre" map-style="/test/fixtures/local-style.json"
+            worker-url="/node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs" max-zoom="8">
+    <button type="button" data-map-open hidden>Open map</button>
+    <div data-map-error hidden><p role="alert">Map unavailable</p></div>
+    <section data-map-canvas aria-label="Test locations" hidden></section>
+    <script type="application/json" data-map-points>[{"latitude":0,"longitude":0,"label":"Office","links":[{"label":"Details","href":"/office"}]},{"latitude":0.001,"longitude":0.001,"label":"Park"}]</script>
+  </map-view>
+  <script type="module" src="/src/define.js"></script>
+</body>
+</html>

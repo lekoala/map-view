@@ -3,7 +3,7 @@
 ## Local commands
 
 ```sh
-bun install
+bun install --frozen-lockfile
 bun run check
 bun run verify
 bunx playwright install chromium firefox webkit
@@ -11,21 +11,21 @@ bun run test:browser:all
 bun run check:package
 ```
 
-`bun run dev` serves `/demo/index.html` on port 4867.
+`bun run dev` serves `/demo/index.html` on port 4867. The test server serves local dependencies for integration fixtures; it is a development server.
 
-## Unit tests
+## Unit and type tests
 
-`test/unit/validate.test.js` covers coordinates, safe external/relative links, label-only points, malformed input and numeric attributes. Tests use `node:test`, which is also compatible with Bun's runner.
+`test/unit/validate.test.js` covers bounded coordinates, safe external/relative links, label fallback, malformed data and numeric attributes. Consumer type tests check public adapter types and `document.createElement("map-view")` after declaration generation.
 
 ## Browser tests
 
-Fake providers are registered **before** importing `/src/define.js` so `eager` does not race provider registration. Playwright covers click / visible / eager activation, retry, disconnection, stale mount disposal. More tests before release: timeout across dynamic import, request interception/no-network, Google auth failure, focus/keyboard, zoom bounding, real MapLibre style-local + attribution and responsive hidden behavior.
-
-For MapLibre integration smoke, serve a style such as `{ "version": 8, "sources": {}, "layers": [{ "id":"background", "type":"background", "paint":{"background-color":"#edf1e8"}}] }` locally and serve SDK + worker locally. A background-only style exercises the renderer but not real source/tile errors; add separate coverage for style failures and attribution.
+- `map-view.spec.js`: fake-provider activation, retry, timeout, reconnect and late disposal.
+- `contracts.spec.js`: built-in overrides, invalid/throwing disposers, fatal errors, import deadlines, center-only maps, snapshots and hidden visible layouts.
+- `maplibre.spec.js`: real installed MapLibre SDK and worker served locally through a native importmap; no provider/SDK/style/tile requests before click, missing-style failure, recoverable HTTP 500 tiles, CSS, attribution, keyboard popups, static markers, zoom framing and cleanup. Test-only SDK observation is not a component API.
+- `google.spec.js`: local API double for loader ownership, idle listener cleanup, authentication-hook chaining/restoration and canvas style restoration. This does not replace real Google integration with a controlled key.
 
 ## CI/release
 
-GitHub Actions runs Bun checks first, then Chromium, Firefox and WebKit in a Playwright container. Both jobs use Bun 1.4.4 and frozen lockfile installs.
+CI runs verification on Ubuntu and Windows, then browser tests on Chromium, Firefox and WebKit in a Playwright container. Both jobs use Bun 1.4.4 and frozen lockfile installs.
 
-Release gate: check:all, real SDK integration, manual assistive-technology checks and a standalone AssetMapper/importmap fixture. See ROADMAP.md for outstanding coverage.
-
+Release gate: check:all, real Google integration, manual assistive-technology checks and a standalone AssetMapper/importmap fixture. See ROADMAP.md for outstanding coverage.

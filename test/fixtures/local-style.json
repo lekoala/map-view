@@ -1,0 +1,15 @@
+{
+  "version": 8,
+  "sources": {
+    "local": {
+      "type": "raster",
+      "tiles": ["http://127.0.0.1:4867/test/fixtures/tiles/{z}/{x}/{y}.png"],
+      "tileSize": 256,
+      "attribution": "Local test attribution"
+    }
+  },
+  "layers": [
+    { "id": "background", "type": "background", "paint": { "background-color": "#edf1e8" } },
+    { "id": "raster", "type": "raster", "source": "local" }
+  ]
+}

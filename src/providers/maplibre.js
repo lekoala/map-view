@@ -57,6 +57,11 @@ export async function mount({ canvas, points, center, options, signal }) {
       marker.getElement().setAttribute("aria-label", point.label);
       const content = renderLinks(point);
       if (content) marker.setPopup(new Popup().setDOMContent(content));
+      else {
+        // Static markers are named images, not buttons with an empty action.
+        marker.getElement().setAttribute("role", "img");
+        marker.getElement().tabIndex = 0;
+      }
       markers.push(marker);
     }
     if (!center && points.length > 1) {
@@ -69,6 +74,8 @@ export async function mount({ canvas, points, center, options, signal }) {
         resolve(undefined);
       };
       const failed = (/** @type {import("maplibre-gl").ErrorEvent} */ event) => {
+        // Tile errors carry a tile on the SDK event; the style may still render.
+        if ("tile" in event) return;
         cleanup();
         reject(event.error ?? new Error("MapLibre failed to load"));
       };

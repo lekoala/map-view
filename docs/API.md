@@ -17,7 +17,9 @@
 | `lang` | nearest inherited HTML lang | SDK language (Google loader is page-global) |
 | `region` | unspecified | Google region hint |
 
-Mandatory `[data-map-canvas]` element with an application-owned fixed/minimum block size. Required `[data-map-points]` `script[type=application/json]` array, even if empty. Optional `[data-map-center]` JSON coordinate. `[data-map-open]` required in click mode; `[data-map-loading]`, `[data-map-error]`, `[data-map-retry]` are app-owned optional UI hooks.
+Mandatory `[data-map-canvas]` element with an application-owned fixed/minimum block size. Required `[data-map-points]` `script[type=application/json]` array, even if empty. Optional `[data-map-center]` JSON coordinate. In click mode, provide `[data-map-open]` or call `show()` from application-owned controls. `[data-map-loading]`, `[data-map-error]`, `[data-map-retry]` are app-owned optional UI hooks.
+
+Controls must exist before connection: open/retry listeners are bound once per connection. Replacing controls requires disconnect/reconnect. Points and options are read at activation and remain a snapshot until teardown.
 
 ## Points
 
@@ -39,6 +41,8 @@ Mandatory `[data-map-canvas]` element with an application-owned fixed/minimum bl
 Events bubble and are composed: `map-view:ready` (`detail.provider`) and `map-view:error` (`detail.error` as Error). They are not cancellation events. There is no `open` event in 0.1.
 
 Provider contract:
+
+Provider-specific settings are validated inside the adapter, including replacements registered under a built-in name. `mount()` must resolve to a function; any other result fails activation. Cleanup functions must be idempotent. Cleanup exceptions are logged to the console and cannot block error reporting, teardown or later sessions.
 
 ```js
 export async function mount({ canvas, points, center, options, signal, onError }) {

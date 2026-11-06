@@ -2,6 +2,8 @@
 
 **In development — 0.0.0, not published.** Small declarative point maps with interchangeable **engines** (Google Maps, MapLibre, future custom adapters), explicit lazy activation, and no universal map API.
 
+The JavaScript entry points run in a browser with DOM globals. Server-side applications can render the HTML, then import the component on the client; importing it during SSR is unsupported.
+
 
 ## Install for development
 
@@ -60,6 +62,8 @@ The consuming app **must give `[data-map-canvas]` a block-size** (for example `2
 ```
 
 The key is not a secret (browser keys require referrer/API restrictions). Google loader configuration is global per page; the first key/language/region wins and a conflicting later map reports an error. No silent fallback between engines.
+
+The built-in Google adapter must own SDK loading for the page. An existing Google SDK or loader with unknown configuration is rejected. The authentication hook is shared across active maps and the previous hook is restored when the last map is disposed.
 
 ## Custom adapters
 

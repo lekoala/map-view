@@ -4,6 +4,15 @@ import { normalizeCenter, normalizePoints, numberAttribute } from "../../src/val
 
 const base = "https://example.test/";
 describe("generic point contract", () => {
+  it("uses link labels when the explicit label is empty or whitespace", () => {
+    for (const label of ["", "   "]) {
+      const [point] = normalizePoints(
+        [{ latitude: 0, longitude: 0, label, links: [{ label: "Office", href: "/office" }] }],
+        base,
+      );
+      assert.equal(point.label, "Office");
+    }
+  });
   it("accepts label-only and cross-origin HTTP(S) links", () => {
     assert.deepEqual(normalizePoints([{ latitude: 50.8, longitude: 4.3, label: "City" }], base)[0].links, []);
     const [point] = normalizePoints(
