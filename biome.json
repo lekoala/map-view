@@ -5,6 +5,7 @@
     "includes": [
       "**",
       "!dist",
+      "!demo/vendor",
       "!bun.lock",
       "!references",
       "!.tmp",

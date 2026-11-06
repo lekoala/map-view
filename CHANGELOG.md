@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepare the Google demo loader for browsers and exercise the real loader with an intercepted remote SDK request.
+
 - Extract generic point normalizer and native `<map-view>` with three activation modes.
 - Add initial lazy MapLibre / Google adapters, demo-only fake provider, tests and tooling.
 - Harden provider cleanup, validate disposer returns and keep provider configuration checks inside adapters.

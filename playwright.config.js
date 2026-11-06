@@ -7,7 +7,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   fullyParallel: true,
   reporter: "list",
-  webServer: { command: "node test/server.js", port: 4867, reuseExistingServer: !process.env.CI },
+  webServer: { command: "bun run dev", port: 4867, reuseExistingServer: !process.env.CI },
   use: { baseURL: "http://127.0.0.1:4867", trace: process.env.CI ? "on-first-retry" : "retain-on-failure" },
   projects: [
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },

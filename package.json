@@ -71,7 +71,8 @@
     "typescript": "7.0.2"
   },
   "scripts": {
-    "dev": "node test/server.js",
+    "dev": "bun run build:demo && node test/server.js",
+    "build:demo": "bun scripts/build-demo.js",
     "build:types": "tsc -p tsconfig.types.json && node scripts/complete-types.js",
     "build:manifest": "node scripts/custom-elements.js",
     "build": "bun run build:types && bun run build:manifest",

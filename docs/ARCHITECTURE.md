@@ -43,6 +43,7 @@ The current Google loader config and MapLibre worker URL affect the page, not on
 - The package ships ESM source + generated types, no IIFE/standalone entry for 0.1.
 - `src/map-view.js` contains only lazy callbacks to provider modules; adapter SDK imports are lazy too.
 - Importmaps must resolve the optional peers `maplibre-gl` or `@googlemaps/js-api-loader` and the package's relative dynamic imports.
+- The Google loader ESM build references `process.env.NODE_ENV`; a browser asset pipeline must replace this constant. The local demo prepares a browser entry with Bun before serving it, without adding Node globals to the page.
 - `maplibre-gl` CSS must be explicitly loaded by the consuming app; `map-view.css` only covers the shell.
 - No default map style, tiles, or API key. `map-style` is required for MapLibre.
 
