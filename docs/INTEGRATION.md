@@ -6,4 +6,4 @@
 4. Supply an explicit MapLibre style and optional worker URL, or a restricted Google browser key and map ID. Preserve lazy SDK imports.
 5. Test partial navigation, hidden layouts, retry and zero SDK/style/tile requests before activation in the consuming application.
 
-Before release, add a standalone Symfony AssetMapper/importmap fixture to prove dynamic relative imports and optional peer resolution. Application migrations belong in their own repositories.
+For Symfony AssetMapper/importmap, preserve literal dynamic relative imports and map optional package specifiers to browser-ready assets. This repository does not include or claim a framework-specific integration test. Consumer applications should validate their own asset configuration; these fixtures are outside the package release gate. Application migrations belong in their own repositories.

@@ -36,6 +36,8 @@ The Background selector also offers [OpenFreeMap Liberty](https://openfreemap.or
 
 ## Manual Google demo
 
+For a repeatable real-SDK smoke, put `GOOGLE_MAPS_DEMO_KEY` in an ignored `.env` file or the environment and run `bun run test:google`. It starts its own server and checks default/custom markers, keyboard, auth-hook handling, retry, zoom cap, center-only rendering and teardown. This command intentionally uses Google's remote SDK and is separate from credential-free CI.
+
 Run `bun run dev`, open `http://127.0.0.1:4867/demo/google.html`, paste your own Maps Demo Key and keep `DEMO_MAP_ID` for testing. Select Load map. The dev command first builds the installed loader into `demo/vendor/google-loader.js` with its `process.env.NODE_ENV` constant replaced for browsers. The local importmap resolves this generated file; the adapter loads it and Google's remote SDK only after activation. Reload to change credentials because loader configuration is page-global.
 
 If serving the demo with another local web server, run `bun run build:demo` first. The generated vendor directory is ignored by Git and excluded from the published package. Consuming applications must also process the loader's environment constant through their asset pipeline; pointing an importmap directly at the upstream file does not work without that preparation.
@@ -48,4 +50,4 @@ Check marker keyboard behavior (linked and label-only), popup links, initial fra
 
 CI runs verification on Ubuntu and Windows, then browser tests on Chromium, Firefox and WebKit in a Playwright container. Both jobs use Bun 1.4.4 and frozen lockfile installs.
 
-Release gate: check:all, real Google integration, manual assistive-technology checks and a standalone AssetMapper/importmap fixture. See ROADMAP.md for outstanding coverage.
+Release gate: check:all, real Google integration and manual assistive-technology checks. Framework-specific integration fixtures are outside this package's release gate; see INTEGRATION.md for consumer configuration guidance.

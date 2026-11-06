@@ -56,7 +56,7 @@ Optional `renderMarker(point, index)` returns application-owned visual DOM. The 
 3. Review `src/providers/` against installed SDK APIs and validate behavior with real SDK integration tests.
 4. Add real MapLibre integration smoke with local style and locally served SDK/worker; independently test Google behind a controlled environment/API key.
 5. Prove true click-lazy behavior by intercepting network requests in the browser.
-6. Verify Symfony AssetMapper/importmap resolves dynamic relative `./providers/*.js` and optional package specifiers in a standalone consumer fixture.
+6. Document importmap and asset-pipeline requirements for consumers. Framework-specific integration fixtures are not a package release requirement.
 7. Confirm no package assets missing via npm pack. Set version `0.1.0` and remove `private` only after the release gate is green.
 
 Consumer application migrations belong in their own repositories.

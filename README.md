@@ -11,6 +11,8 @@ Requires Bun 1.4.4 (the setup validation version). Run `bun install --frozen-loc
 
 The package is deliberately `private: true` until implementation and verification are complete. **Publish 0.1 only after all release gates pass.** See [docs/ROADMAP.md](docs/ROADMAP.md).
 
+The v0.1 release preparation, validated behavior and remaining manual/CI gates are recorded in [docs/RELEASE.md](docs/RELEASE.md).
+
 ## Declarative usage
 
 ```html

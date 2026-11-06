@@ -21,7 +21,7 @@
 - [x] Verify HTTP 500 tile errors during initial loading remain recoverable while missing styles fail activation.
 - [x] Cover import deadlines, hidden visible layouts, center-only maps, activation snapshots and fatal errors after readiness.
 - [x] Cover supported provider module shapes, ready-event flags and old callbacks/completions after a newer attempt succeeds.
-- [x] Local validation: 7 unit tests, public type tests, generated files, 120 browser tests across Chromium/Firefox/WebKit and package validation.
+- [x] Local validation: 7 unit tests, public type tests, generated files, 126 browser tests across Chromium/Firefox/WebKit and package validation.
 - [x] Custom marker DOM via snapshotted `renderMarker(point, index)`, validation/cleanup and host CSS theme variables; see `THEMING.md` and the demo appearance controls.
 
 Installed SDKs: Google loader 2.1.3, Google types 3.66.9 and MapLibre 6.16.0. MapLibre support is deliberately limited to `^6.16.0`; version 5 is not claimed as supported. Google API-double tests exercise lifecycle behavior but do not validate the remote SDK.
@@ -30,11 +30,13 @@ Installed SDKs: Google loader 2.1.3, Google types 3.66.9 and MapLibre 6.16.0. Ma
 
 The real MapLibre demo now includes a local background, explicit OpenFreeMap/LFMaps choices, a custom-style input and a metadata-driven details dialog. Both live online styles were smoke-tested in Chromium with visible attribution and marker selection. `map-view:select` is implemented across the built-in adapters and the offline demo; selection carries a copied point (including optional JSON `data`) and its snapshot index. Cross-browser selection and metadata regression tests are part of the automated gate.
 
-- [ ] Validate real Google with a controlled key: authentication, first render, markers including label-only keyboard access, bounds zoom cap and cleanup.
-- [ ] Verify application-owned loading/error focus transitions and manual screen-reader, zoom and forced-colors behavior; see `ACCESSIBILITY.md`.
-- [ ] Prove Symfony AssetMapper/importmap resolution in a standalone fixture; see `INTEGRATION.md`. The native importmap smoke does not prove AssetMapper rewriting.
+- [x] Validate real Google with the local demo key: readiness, keyboard/selection, auth-hook handling, retry, custom markers, bounds zoom cap, center-only map and cleanup via `bun run test:google`.
+- [x] Automate application-owned keyboard/focus transitions, forced colors, reduced motion and CSS enlargement.
+- [ ] Complete manual screen-reader and real browser zoom checks; see `ACCESSIBILITY.md`.
 - [ ] Confirm CI results on Ubuntu and Windows; local results are not a CI run.
 - [ ] Set version 0.1.0 and remove private only after all release gates pass.
+
+Release evidence and finalization steps are tracked in `RELEASE.md`. Consumer-specific PHP/framework fixtures are not required for this release.
 
 ## Potential after 0.1
 

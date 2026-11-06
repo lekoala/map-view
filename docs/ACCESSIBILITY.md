@@ -13,4 +13,18 @@ The component hides the open/retry control when activation starts and does not a
 
 ## Automated evidence
 
-The real MapLibre suite runs on Chromium, Firefox and WebKit. It checks Enter/Space and click selection on linked and label-only markers, button semantics, focus on popup anchors, SDK CSS and visible attribution. The demo also exercises an application-owned details dialog. Google uses `gmpClickable` for all markers and its native activation event; the API-double suite verifies selection callbacks and cleanup. These tests do not validate screen-reader announcements, real Google marker keyboard behavior, forced colors or all application-owned focus transitions. The checklist above remains the manual release gate.
+The real MapLibre suite runs on Chromium, Firefox and WebKit. It checks Enter/Space and click selection on linked and label-only markers, button semantics, focus on popup anchors, SDK CSS and visible attribution. The demo also exercises an application-owned details dialog. Google uses `gmpClickable` for all markers and its native activation event; the API-double suite verifies selection callbacks and cleanup. Automated results do not establish screen-reader announcements; the checklist above remains the manual release gate.
+
+`accessibility.spec.js` additionally verifies keyboard activation, named map regions, popup link focus, dialog Escape/return focus, forced-colors/reduced-motion emulation and CSS enlargement on all three browsers. `bun run test:google` verifies real Google keyboard activation for default and custom markers using the local demo key. These are automated observations, not a screen-reader audit.
+
+## Manual release record
+
+Status: not performed, as confirmed by the maintainer on 2026-11-06. Do not mark the manual checklist complete based on automated tests alone.
+
+Record the following after the smoke:
+
+- Operating system, browser/version and reader/version (NVDA+Chrome or VoiceOver+Safari).
+- Open/loading/error announcements, map name and retry focus.
+- Default/custom marker names and keyboard activation, popup links and dialog Escape/return focus.
+- Browser zoom at 200%, forced colors and reduced motion.
+- Result, any defect and follow-up action.

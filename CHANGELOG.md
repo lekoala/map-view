@@ -1,26 +1,16 @@
 # Changelog
 
-## Unreleased
+## 0.1.0 — planned, unreleased
 
-- Add snapshotted `renderMarker(point, index)` DOM callbacks for both adapters, preserving accessible selection and popups.
-- Expose host CSS variables for popup colors, fonts, spacing, sizing, corners, shadows and focus; add live theme and numbered-marker demo examples.
+- Add a browser-only native `<map-view>` with ESM entries, generated declarations and a custom-elements manifest.
+- Load providers only on click, visibility or eager activation; support deadlines, retry, reconnect and stale-operation cleanup.
+- Validate coordinates and HTTP(S) links; support explicit centers, zoom caps, label-only points and optional JSON `data`.
+- Add optional Google Maps and MapLibre adapters with explicit configuration and no automatic failover or external tile defaults.
+- Emit `map-view:ready`, `map-view:error` and `map-view:select` with normalized point data and snapshot index.
+- Support `renderMarker(point, index)` for application-owned marker DOM while preserving SDK positioning, keyboard activation, popups and teardown.
+- Theme popup content and MapLibre popup chrome through CSS variables declared on `map-view`.
+- Provide offline, MapLibre and Google demos with custom markers, live themes, explicit OpenFreeMap/LFMaps choices and a metadata-driven details dialog.
+- Add lifecycle/security/type regressions, real MapLibre tests, real Google smoke, keyboard/focus/layout checks and package-content validation.
+- Configure reproducible Bun checks on Ubuntu/Windows and Chromium/Firefox/WebKit in CI.
 
-- Restyle linked-marker popups with a title, compact link cards, rounded MapLibre chrome and visible keyboard focus.
-- Offer explicit OpenFreeMap and LFMaps backgrounds in the MapLibre demo.
-
-- Add `map-view:select` with copied point data and snapshot index across Google, MapLibre and the offline demo.
-- Preserve optional JSON point metadata in `data` for consumer-owned details views and dialogs.
-- Add a real MapLibre demo with a local background, explicit custom style input and a selection/details example.
-
-- Prepare the Google demo loader for browsers and exercise the real loader with an intercepted remote SDK request.
-
-- Extract generic point normalizer and native `<map-view>` with three activation modes.
-- Add initial lazy MapLibre / Google adapters, demo-only fake provider, tests and tooling.
-- Harden provider cleanup, validate disposer returns and keep provider configuration checks inside adapters.
-- Accept empty point labels when safe links supply the accessible label.
-- Add real local MapLibre smoke, network interception, lifecycle regressions and Google API-double tests.
-- Clean up Google idle listeners, authentication hooks and SDK canvas styles; reject unknown external loader configuration.
-- Export adapter contract types and declare the custom element in `HTMLElementTagNameMap`.
-- Test MapLibre 6.16+ and limit its peer range to the verified major; add Windows verification to CI.
-- Remains private until real Google, consumer integration and manual accessibility release gates pass.
-
+The release remains private pending the manual accessibility smoke and CI confirmation described in `docs/RELEASE.md`.

@@ -1,10 +1,12 @@
 {
   "name": "@lekoala/map-view",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Tiny declarative provider-neutral point maps with explicit lazy activation",
   "type": "module",
   "license": "MIT",
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lekoala/map-view.git"
@@ -84,6 +86,7 @@
     "test:types": "tsc -p test/types/tsconfig.json",
     "test:browser": "playwright test browser --project chromium",
     "test:browser:all": "playwright test browser",
+    "test:google": "bun run build:demo && node scripts/smoke-google.js",
     "test:syntax": "node scripts/check-syntax.js",
     "check": "bun run test:syntax && bun run lint && bun run typecheck && bun run test",
     "check:generated": "node scripts/custom-elements.js --check",

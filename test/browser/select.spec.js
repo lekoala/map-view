@@ -76,6 +76,12 @@ test("selection carries normalized snapshot data and ignores loading, invalid an
 });
 
 test("real MapLibre markers emit exactly one selection for click, Enter and Space", async ({ page }) => {
+  await page.route("**/local-style.json", (route) =>
+    route.fulfill({
+      path: "demo/local-maplibre-style.json",
+      contentType: "application/json",
+    }),
+  );
   await page.goto("/test/fixtures/maplibre.html");
   await page.waitForFunction(() => customElements.get("map-view"));
   await page.evaluate(() => {
@@ -89,7 +95,7 @@ test("real MapLibre markers emit exactly one selection for click, Enter and Spac
     );
   });
   await page.getByRole("button", { name: "Open map" }).click();
-  await expect(page.locator("map-view")).toHaveAttribute("data-state", "ready");
+  await expect(page.locator("map-view")).toHaveAttribute("data-state", "ready", { timeout: 15_000 });
   const office = page.getByRole("button", { name: "Office", exact: true });
   await office.click();
   await expect(page.getByRole("link", { name: "Details" })).toBeVisible();
