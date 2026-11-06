@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { requireWebGL2 } from "./webgl.js";
 
 test("selection carries normalized snapshot data and ignores loading, invalid and stale callbacks", async ({
   page,
@@ -76,6 +77,7 @@ test("selection carries normalized snapshot data and ignores loading, invalid an
 });
 
 test("real MapLibre markers emit exactly one selection for click, Enter and Space", async ({ page }) => {
+  await requireWebGL2(page);
   await page.route("**/local-style.json", (route) =>
     route.fulfill({
       path: "demo/local-maplibre-style.json",

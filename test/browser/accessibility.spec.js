@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
+import { requireWebGL2 } from "./webgl.js";
 
 test("demo keyboard flow preserves map, popup and dialog focus", async ({ page }) => {
+  await requireWebGL2(page);
   await page.goto("/demo/maplibre.html");
   const load = page.getByRole("button", { name: "Load map", exact: true });
   await load.focus();
@@ -23,6 +25,7 @@ test("demo keyboard flow preserves map, popup and dialog focus", async ({ page }
 });
 
 test("forced colors, reduced motion and enlarged layout retain named controls", async ({ page }) => {
+  await requireWebGL2(page);
   await page.emulateMedia({ forcedColors: "active", reducedMotion: "reduce" });
   await page.setViewportSize({ width: 800, height: 900 });
   await page.goto("/demo/maplibre.html");

@@ -1,10 +1,12 @@
 import { expect, test } from "@playwright/test";
+import { requireWebGL2 } from "./webgl.js";
 
 for (const style of [
   "https://tiles.openfreemap.org/styles/liberty",
   "https://data.lfmaps.fr/styles/bright",
 ]) {
   test(`online background is an explicit lazy choice: ${style}`, async ({ page }) => {
+    await requireWebGL2(page);
     const requested = [];
     await page.route(/^https:\/\//, (route) => {
       requested.push(route.request().url());
@@ -31,6 +33,7 @@ for (const style of [
 test("MapLibre demo stays local and lazy and uses selected metadata in an application dialog", async ({
   page,
 }) => {
+  await requireWebGL2(page);
   const requests = [];
   const external = [];
   await page.route("**/*", (route) => {

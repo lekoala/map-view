@@ -1,8 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { requireWebGL2 } from "./webgl.js";
 
 test("real MapLibre stays lazy, tolerates missing tiles, supports keyboard and cleans up", async ({
   page,
 }) => {
+  await requireWebGL2(page);
   const requests = [];
   const external = [];
   const workers = [];
@@ -68,6 +70,7 @@ for (const empty of [false, true]) {
   test(`explicit center keeps its zoom without fitting (${empty ? "zero" : "multiple"} points)`, async ({
     page,
   }) => {
+    await requireWebGL2(page);
     await page.route("**/local-style.json", (route) =>
       route.fulfill({
         json: {

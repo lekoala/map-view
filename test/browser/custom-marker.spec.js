@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
+import { requireWebGL2 } from "./webgl.js";
 
 test("custom MapLibre markers keep popup, keyboard selection and theme variables", async ({ page }) => {
+  await requireWebGL2(page);
   await page.goto("/demo/maplibre.html");
   await page.waitForFunction(() => customElements.get("map-view"));
   await page.evaluate(() => {
@@ -52,6 +54,7 @@ test("custom MapLibre markers keep popup, keyboard selection and theme variables
 });
 
 test("demo offers numbered markers and a live theme without remounting", async ({ page }) => {
+  await requireWebGL2(page);
   await page.goto("/demo/maplibre.html");
   await page.waitForFunction(() => customElements.get("map-view"));
   await page.getByLabel("Markers", { exact: true }).selectOption("numbered");
