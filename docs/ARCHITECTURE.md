@@ -14,6 +14,8 @@ SDK + sources/tiles + markers + popups + map interactions
 
 The core is deliberately agnostic to markers implementations. It passes normalized values and a `signal`, waits for an adapter to resolve to `dispose`, then emits `map-view:ready`.
 
+Marker activation is reported as `onSelect(index)`. The core validates the live ready attempt and emits `map-view:select` with a copied normalized point and its snapshot index. Optional JSON metadata in `point.data` is application-owned. No SDK objects cross this event boundary.
+
 ## State machine
 
 `idle` -> `loading` -> `ready` or `error`. `error` -> `loading` through retry. `disconnect` -> teardown + `idle` (fresh session after reconnect).
@@ -44,7 +46,7 @@ The current Google loader config and MapLibre worker URL affect the page, not on
 - `src/map-view.js` contains only lazy callbacks to provider modules; adapter SDK imports are lazy too.
 - Importmaps must resolve the optional peers `maplibre-gl` or `@googlemaps/js-api-loader` and the package's relative dynamic imports.
 - The Google loader ESM build references `process.env.NODE_ENV`; a browser asset pipeline must replace this constant. The local demo prepares a browser entry with Bun before serving it, without adding Node globals to the page.
-- `maplibre-gl` CSS must be explicitly loaded by the consuming app; `map-view.css` only covers the shell.
+- `maplibre-gl` CSS must be explicitly loaded by the consuming app; `map-view.css` covers the component shell, popup content and adapter-selected MapLibre popup chrome.
 - No default map style, tiles, or API key. `map-style` is required for MapLibre.
 
 ## SDK verification requirements

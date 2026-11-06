@@ -1,5 +1,6 @@
 // Deterministic API double. This does not validate Google's remote renderer.
 window.__maps = [];
+window.__markers = [];
 window.__configurations = [];
 const events = new Map();
 export function setOptions(options) {
@@ -27,6 +28,10 @@ export function setOptions(options) {
         extend() {}
       },
       InfoWindow: class {
+        setContent(content) {
+          window.__popupContent = content;
+        }
+        open() {}
         close() {}
       },
     },
@@ -48,5 +53,13 @@ export async function importLibrary(name) {
         }
       },
     };
-  return { AdvancedMarkerElement: class {} };
+  return {
+    AdvancedMarkerElement: class extends EventTarget {
+      constructor(options) {
+        super();
+        Object.assign(this, options);
+        window.__markers.push(this);
+      }
+    },
+  };
 }

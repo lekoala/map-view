@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Restyle linked-marker popups with a title, compact link cards, rounded MapLibre chrome and visible keyboard focus.
+- Offer explicit OpenFreeMap and LFMaps backgrounds in the MapLibre demo.
+
+- Add `map-view:select` with copied point data and snapshot index across Google, MapLibre and the offline demo.
+- Preserve optional JSON point metadata in `data` for consumer-owned details views and dialogs.
+- Add a real MapLibre demo with a local background, explicit custom style input and a selection/details example.
+
 - Prepare the Google demo loader for browsers and exercise the real loader with an intercepted remote SDK request.
 
 - Extract generic point normalizer and native `<map-view>` with three activation modes.

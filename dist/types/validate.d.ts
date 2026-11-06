@@ -1,7 +1,9 @@
 /** @typedef {import("./contract.js").MapCoordinate} MapCoordinate */
 /** @typedef {import("./contract.js").MapPoint} MapPoint */
+/** @typedef {import("./contract.js").JsonValue} JsonValue */
 export type MapCoordinate = import("./contract.js").MapCoordinate;
 export type MapPoint = import("./contract.js").MapPoint;
+export type JsonValue = import("./contract.js").JsonValue;
 /** @param {unknown} value @param {string} name @returns {MapCoordinate} */
 export declare function normalizeCoordinate(value: unknown, name?: string): MapCoordinate;
 /** @param {unknown} value @param {string} baseURI @returns {MapPoint[]} */

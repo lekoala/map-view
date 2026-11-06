@@ -4,6 +4,33 @@ import { normalizeCenter, normalizePoints, numberAttribute } from "../../src/val
 
 const base = "https://example.test/";
 describe("generic point contract", () => {
+  it("preserves arbitrary JSON metadata as an independent value", () => {
+    const data = {
+      id: 42,
+      nested: { tags: ["office", null, true, 1] },
+      html: "<img src=x onerror=alert(1)>",
+    };
+    const [point] = normalizePoints([{ latitude: 1, longitude: 2, label: "Office", data }], base);
+    assert.deepEqual(point.data, data);
+    data.nested.tags[0] = "changed";
+    assert.equal(point.data.nested.tags[0], "office");
+    for (const value of [null, false, 42, "text", [1, 2]]) {
+      assert.deepEqual(
+        normalizePoints([{ latitude: 1, longitude: 2, label: "Office", data: value }], base)[0].data,
+        value,
+      );
+    }
+  });
+  it("rejects metadata that cannot be represented faithfully as JSON", () => {
+    const cyclic = {};
+    cyclic.self = cyclic;
+    for (const data of [cyclic, () => {}, { nested: NaN }, { nested: undefined }, new Date()]) {
+      assert.throws(
+        () => normalizePoints([{ latitude: 1, longitude: 2, label: "Office", data }], base),
+        /point data/,
+      );
+    }
+  });
   it("uses link labels when the explicit label is empty or whitespace", () => {
     for (const label of ["", "   "]) {
       const [point] = normalizePoints(

@@ -47,7 +47,7 @@ test("real MapLibre stays lazy, tolerates missing tiles, supports keyboard and c
   await expect(page.getByRole("link", { name: "Details" })).toBeVisible();
   await page.getByRole("link", { name: "Details" }).focus();
   await expect(page.getByRole("link", { name: "Details" })).toBeFocused();
-  const label = page.getByRole("img", { name: "Park", exact: true });
+  const label = page.getByRole("button", { name: "Park", exact: true });
   await label.focus();
   await expect(label).toBeFocused();
   expect(external).toEqual([]);

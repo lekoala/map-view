@@ -16,6 +16,7 @@
 <body>
   <h1>Google Maps manual test</h1>
   <p><a href="/demo/index.html">Offline demo</a></p>
+  <p><a href="/demo/maplibre.html">MapLibre demo</a></p>
   <p>Enter your Maps Demo Key or development API key. Google requests start when you select Load map.
     The key is not saved in browser storage or the page URL. Reload the page to change credentials after loading.</p>
   <form id="credentials" autocomplete="off">
@@ -41,5 +42,8 @@
   <p>Check the Office marker and its link using the keyboard, the Park label, initial framing,
     attribution and teardown. Developer tools show loader and authentication errors.</p>
   <script type="module" src="/demo/google.js"></script>
+  <h2>Selected point</h2>
+  <pre id="selection" aria-live="polite">No point selected.</pre>
+  <script type="module" src="/demo/selection.js"></script>
 </body>
 </html>

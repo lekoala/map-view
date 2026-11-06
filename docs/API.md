@@ -25,12 +25,14 @@ Controls must exist before connection: open/retry listeners are bound once per c
 
 ```json
 [
-  {"latitude":50.85,"longitude":4.35,"label":"Office"},
+  {"latitude":50.85,"longitude":4.35,"label":"Office","data":{"id":42,"type":"office"}},
   {"latitude":50.9,"longitude":4.4,"links":[{"label":"Profile","href":"/doctors/a"}]}
 ]
 ```
 
 `label` may be omitted if nonempty `links` are present. Empty links are valid if label exists. Link `label` and URL must be strings with nonempty content. Relative links are resolved from `document.baseURI`; only HTTP(S) URLs accepted, including cross-origin. Popups are rendered with DOM/textContent. Invalid entries reject the entire activation before invoking the provider.
+
+Optional `data` carries arbitrary JSON metadata for the consuming application: objects, arrays, strings, finite numbers, booleans or null. It is copied during normalization and included in selection events. It does not provide a label or automatically become popup content. Functions, cycles, class instances and non-JSON nested values are rejected by the public normalizer. Applications own how they render metadata and must treat its strings as untrusted text.
 
 ## JS public surface
 
@@ -38,18 +40,37 @@ Controls must exist before connection: open/retry listeners are bound once per c
 - `element.show()` — request activation programmatically (also works with `activation="click"`).
 - `element.state` — read-only `idle|loading|ready|error`.
 
-Events bubble and are composed: `map-view:ready` (`detail.provider`) and `map-view:error` (`detail.error` as Error). They are not cancellation events. There is no `open` event in 0.1.
+Events bubble, are composed and are not cancelable:
+
+- `map-view:ready`: `detail.provider`.
+- `map-view:error`: `detail.error` as Error.
+- `map-view:select`: `detail.point` (a fresh copy of the normalized point, including `data`) and `detail.index` (zero-based position in the activation snapshot).
+
+Each marker activation emits one selection, by click or keyboard (Enter/Space), including label-only markers. Repeated activations of the same marker emit again. Linked markers keep their normal popup behavior; label-only markers select without an empty popup. Following a popup link is ordinary navigation and does not select the marker again. Selection is ignored before readiness and after cancellation, teardown or a newer attempt. There is no persistent selected-state property and no programmatic selection method.
+
+```js
+mapView.addEventListener("map-view:select", ({ detail: { point, index } }) => {
+  title.textContent = point.label;
+  // Application metadata can identify a record or supply content for a dialog.
+  console.log(point.data, index);
+});
+```
+
+For an application-owned dialog without the built-in link popup, provide a label and `data`, and omit `links`. See `/demo/maplibre.html` for an example.
 
 Provider contract:
 
 Provider-specific settings are validated inside the adapter, including replacements registered under a built-in name. `mount()` must resolve to a function; any other result fails activation. Cleanup functions must be idempotent. Cleanup exceptions are logged to the console and cannot block error reporting, teardown or later sessions.
 
 ```js
-export async function mount({ canvas, points, center, options, signal, onError }) {
+export async function mount({ canvas, points, center, options, signal, onError, onSelect }) {
   // Create SDK resources and return when first paint is usable.
   // Respect signal, and report only fatal asynchronous errors via onError(error).
+  // On marker activation, call onSelect?.(index) with its index in points.
   return () => { /* release everything, idempotently */ };
 }
 ```
+
+`onSelect` is an optional callback for adapter interoperability. The core supplies it and validates the index/session before emitting the public event. Adapters own pointer/keyboard activation and must remove their listeners on disposal. Never pass SDK markers or raw SDK events into this callback.
 
 API omissions are intentional: there are no public setters to mutate points, map camera APIs, clustering options, free-form HTML bubbles, geolocation, geocoding or remote `src` loading.

@@ -6,6 +6,9 @@ appendFileSync(
   "dist/types/map-view.d.ts",
   `
 declare global {
+  interface HTMLElementEventMap {
+    "map-view:select": CustomEvent<import("./contract.js").MapSelectDetail>;
+  }
   interface HTMLElementTagNameMap {
     "map-view": MapViewElement;
   }

@@ -1,5 +1,29 @@
 /** @typedef {import("./contract.js").MapCoordinate} MapCoordinate */
 /** @typedef {import("./contract.js").MapPoint} MapPoint */
+/** @typedef {import("./contract.js").JsonValue} JsonValue */
+
+/** Validate and copy application metadata without silently losing non-JSON values.
+ * @param {unknown} value @param {Set<object>} ancestors @returns {JsonValue} */
+function normalizeData(value, ancestors = new Set()) {
+  if (value === null || typeof value === "string" || typeof value === "boolean") return value;
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value !== "object" || !value || ancestors.has(value)) {
+    throw new TypeError("Invalid point data: expected JSON values");
+  }
+  ancestors.add(value);
+  try {
+    if (Array.isArray(value)) return Array.from(value, (item) => normalizeData(item, ancestors));
+    const prototype = Object.getPrototypeOf(value);
+    if (prototype !== Object.prototype && prototype !== null) {
+      throw new TypeError("Invalid point data: expected JSON values");
+    }
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, normalizeData(item, ancestors)]),
+    );
+  } finally {
+    ancestors.delete(value);
+  }
+}
 
 /** @param {unknown} value @returns {value is Record<string, unknown>} */
 function isRecord(value) {
@@ -62,7 +86,12 @@ export function normalizePoints(value, baseURI) {
     const label =
       (typeof raw.label === "string" ? raw.label.trim() : "") || links.map((l) => l.label).join(", ");
     if (!label) throw new TypeError("A map point needs a label or a link");
-    return { ...coordinate, label, links };
+    return {
+      ...coordinate,
+      label,
+      links,
+      ...(raw.data === undefined ? {} : { data: normalizeData(raw.data) }),
+    };
   });
 }
 

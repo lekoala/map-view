@@ -47,6 +47,16 @@ import "@lekoala/map-view/map-view.css";
 
 The consuming app **must give `[data-map-canvas]` a block-size** (for example `24rem`). The component does not choose a map height or a tile service. HTML labels remain app-owned for localization.
 
+Markers emit `map-view:select` on click or keyboard activation. The event carries a normalized point and its zero-based activation index. Add optional JSON `data` to a point for record IDs, descriptions or other application metadata:
+
+```js
+mapView.addEventListener("map-view:select", ({ detail: { point, index } }) => {
+  console.log(point.data, index);
+});
+```
+
+Try `/demo/maplibre.html` for the real local MapLibre engine, a selection log and a metadata-driven details dialog. The default background makes no tile requests; a custom style URL is an explicit choice in the demo. `/demo/google.html` shows selection events with your Google key.
+
 `activation` modes:
 
 - `click` (default): absolutely no provider import, SDK, style or tile request before a click or `mapView.show()`.

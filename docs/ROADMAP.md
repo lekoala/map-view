@@ -21,11 +21,13 @@
 - [x] Verify HTTP 500 tile errors during initial loading remain recoverable while missing styles fail activation.
 - [x] Cover import deadlines, hidden visible layouts, center-only maps, activation snapshots and fatal errors after readiness.
 - [x] Cover supported provider module shapes, ready-event flags and old callbacks/completions after a newer attempt succeeds.
-- [x] Local validation: 5 unit tests, public type tests, generated files, 75 browser tests across Chromium/Firefox/WebKit and package validation.
+- [x] Local validation: 7 unit tests, public type tests, generated files, 96 browser tests across Chromium/Firefox/WebKit and package validation.
 
 Installed SDKs: Google loader 2.1.3, Google types 3.66.9 and MapLibre 6.16.0. MapLibre support is deliberately limited to `^6.16.0`; version 5 is not claimed as supported. Google API-double tests exercise lifecycle behavior but do not validate the remote SDK.
 
 ## Required before 0.1.0
+
+The real MapLibre demo now includes a local background, explicit OpenFreeMap/LFMaps choices, a custom-style input and a metadata-driven details dialog. Both live online styles were smoke-tested in Chromium with visible attribution and marker selection. `map-view:select` is implemented across the built-in adapters and the offline demo; selection carries a copied point (including optional JSON `data`) and its snapshot index. Cross-browser selection and metadata regression tests are part of the automated gate.
 
 - [ ] Validate real Google with a controlled key: authentication, first render, markers including label-only keyboard access, bounds zoom cap and cleanup.
 - [ ] Verify application-owned loading/error focus transitions and manual screen-reader, zoom and forced-colors behavior; see `ACCESSIBILITY.md`.

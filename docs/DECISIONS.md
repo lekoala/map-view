@@ -32,3 +32,7 @@ Provider-neutral lazy imports are more important than a standalone IIFE bundle. 
 
 Tests register a deterministic fake provider. The offline demo registers its own provider. A MapLibre local background style is suitable for future real integration smoke; Leaflet is not a requirement.
 
+## D9 — Domain selection and application metadata
+
+Adapters report marker activation through `onSelect(index)`. The core emits `map-view:select` with a copied normalized point and its index in the activation snapshot, only for the live ready attempt. All markers are selectable, including those without links. Built-in link popups remain adapter-owned. Optional JSON `data` belongs to the application and is never rendered as popup HTML automatically. Dialogs and record lookup belong to consumers.
+

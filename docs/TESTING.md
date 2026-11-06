@@ -24,6 +24,14 @@ bun run check:package
 - `maplibre.spec.js`: real installed MapLibre SDK and worker served locally through a native importmap; no provider/SDK/style/tile requests before click, missing-style failure, recoverable HTTP 500 tiles, CSS, attribution, keyboard popups, static markers, zoom framing and cleanup. Test-only SDK observation is not a component API.
 - `google.spec.js`: local API double for loader ownership, idle listener cleanup, authentication-hook chaining/restoration and canvas style restoration. This does not replace real Google integration with a controlled key.
 - `google-demo.spec.js`: real installed loader in the demo, without Node globals. The remote SDK request is intercepted to verify deferred loading and the authentication error UI without sending a real key.
+- `select.spec.js`: normalized selection data, event flags, defensive metadata copies, stale callback rejection and real MapLibre click/Enter/Space activation.
+- `maplibre-demo.spec.js`: real MapLibre demo remains local/lazy and renders selected metadata in an application-owned dialog.
+
+## MapLibre demo
+
+Open `http://127.0.0.1:4867/demo/maplibre.html` after `bun run dev`. Load the local background, activate either marker and inspect the `map-view:select` payload. The details button opens a dialog using `point.data`. Entering a custom style URL explicitly opts into that style and any configured services.
+
+The Background selector also offers [OpenFreeMap Liberty](https://openfreemap.org/quick_start/) and [LFMaps Bright](https://lfmaps.fr/en/), both documented as usable without an API key. These online styles are requested only after choosing them and selecting Load map. Keep the SDK attribution control visible. Automated tests intercept those remote styles so CI does not depend on third-party availability.
 
 ## Manual Google demo
 

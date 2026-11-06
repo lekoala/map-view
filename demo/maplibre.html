@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>map-view — MapLibre demo</title>
+  <link rel="stylesheet" href="/src/map-view.css">
+  <link rel="stylesheet" href="/node_modules/maplibre-gl/dist/maplibre-gl.css">
+  <style>
+    body { max-width: 960px; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; }
+    fieldset { display: grid; gap: .75rem; margin-bottom: 1rem; }
+    input, select, button { font: inherit; padding: .5rem; min-width: 0; }
+    [data-map-canvas] { height: 440px; border: 1px solid #b4c8bb; border-radius: .5rem; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #f1f4ef; padding: 1rem; }
+  </style>
+  <script type="importmap">{"imports":{"maplibre-gl":"/node_modules/maplibre-gl/dist/maplibre-gl.mjs"}}</script>
+</head>
+<body>
+  <h1>MapLibre demo</h1>
+  <nav><a href="/demo/index.html">Offline demo</a> · <a href="/demo/google.html">Google demo</a></nav>
+  <p>This page uses the real MapLibre engine. The default style is a plain local background:
+    no tile service or API key is needed. Pan, zoom and select markers by click, Enter or Space.</p>
+  <form id="style-form">
+    <fieldset>
+      <legend>Map style</legend>
+      <label for="style-preset">Background</label>
+      <select id="style-preset" name="background">
+        <option value="/demo/local-maplibre-style.json">Local plain background (offline)</option>
+        <option value="https://tiles.openfreemap.org/styles/liberty">OpenFreeMap — Liberty (online)</option>
+        <option value="https://data.lfmaps.fr/styles/bright">LFMaps — Bright (online)</option>
+      </select>
+      <label for="style-url">Style URL (optional override)</label>
+      <input id="style-url" name="style" placeholder="/demo/local-maplibre-style.json">
+      <p>Choose an online background for streets and place names, or enter your own style URL.
+        Online styles contact external services after Load map.
+        Reload this page to change the style after loading.</p>
+      <button type="submit">Load map</button>
+    </fieldset>
+  </form>
+  <p>Backgrounds: <a href="https://openfreemap.org/">OpenFreeMap</a> · <a href="https://lfmaps.fr/en/">LFMaps</a>.
+    Map data attribution is displayed on the map.</p>
+  <p id="result" role="status">Waiting to load.</p>
+  <map-view id="maplibre" provider="maplibre" map-style="/demo/local-maplibre-style.json"
+            worker-url="/node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs" max-zoom="13">
+    <p data-map-loading role="status" hidden>Loading MapLibre…</p>
+    <div data-map-error hidden>
+      <p id="error-message" role="alert">Could not load MapLibre.</p>
+      <button type="button" data-map-retry>Retry</button>
+    </div>
+    <section data-map-canvas aria-label="Example locations" tabindex="-1" hidden></section>
+    <script type="application/json" data-map-points>[{"latitude":50.85,"longitude":4.35,"label":"Office","data":{"id":42,"type":"office","description":"Appointments available on weekdays."},"links":[{"label":"Office details","href":"/demo/index.html"}]},{"latitude":50.82,"longitude":4.43,"label":"Park","data":{"id":43,"type":"park","description":"Open daily."}}]</script>
+  </map-view>
+  <h2>Selected point</h2>
+  <p>Every marker activation emits <code>map-view:select</code>. Linked markers also toggle their popup.
+    Label-only markers select the point without opening an empty popup.</p>
+  <pre id="selection" aria-live="polite">No point selected.</pre>
+  <button type="button" id="open-details" disabled>Open selected details</button>
+  <dialog id="details" aria-labelledby="details-title">
+    <h2 id="details-title">Point details</h2>
+    <p id="details-description"></p>
+    <form method="dialog"><button type="submit">Close</button></form>
+  </dialog>
+  <script type="module" src="/demo/maplibre.js"></script>
+  <script type="module" src="/demo/selection.js"></script>
+</body>
+</html>

@@ -4,6 +4,46 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/test/fixtures/google.html");
 });
 
+test("Google selects linked and label-only markers and removes selection listeners on dispose", async ({
+  page,
+}) => {
+  await page.evaluate(async () => {
+    const { mount } = await import("/src/providers/google.js");
+    window.__selected = [];
+    window.__mounted = mount({
+      canvas: document.querySelector("#canvas"),
+      points: [
+        { latitude: 0, longitude: 0, label: "Office", links: [{ label: "Details", href: "/office" }] },
+        { latitude: 1, longitude: 1, label: "Park", links: [] },
+      ],
+      center: { latitude: 0, longitude: 0 },
+      options: { apiKey: "test", mapId: "test", zoom: 12, maxZoom: 15 },
+      signal: new AbortController().signal,
+      onError() {},
+      onSelect: (index) => window.__selected.push(index),
+    });
+  });
+  await expect.poll(() => page.evaluate(() => window.__markers?.length)).toBe(2);
+  await page.evaluate(async () => {
+    window.__idle();
+    window.__dispose = await window.__mounted;
+    window.__markers.forEach((marker) => {
+      marker.dispatchEvent(new Event("gmp-click"));
+    });
+  });
+  expect(await page.evaluate(() => window.__selected)).toEqual([0, 1]);
+  expect(await page.evaluate(() => window.__markers.map((marker) => marker.gmpClickable))).toEqual([
+    true,
+    true,
+  ]);
+  expect(await page.evaluate(() => window.__popupContent.querySelector("a").textContent)).toBe("Details");
+  await page.evaluate(() => {
+    window.__dispose();
+    window.__markers[0].dispatchEvent(new Event("gmp-click"));
+  });
+  expect(await page.evaluate(() => window.__selected)).toEqual([0, 1]);
+});
+
 test("Google shares one stable loader and keeps the hook until the last map is disposed", async ({
   page,
 }) => {

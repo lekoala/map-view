@@ -61,7 +61,7 @@ function configureLoader(requested, loader) {
 }
 
 /** @param {ProviderContext} context */
-export async function mount({ canvas, points, center, options, signal, onError }) {
+export async function mount({ canvas, points, center, options, signal, onError, onSelect }) {
   if (!options.apiKey || !options.mapId) throw new Error("Google requires api-key and map-id");
   const loader = await import("@googlemaps/js-api-loader");
   if (signal.aborted) return () => {};
@@ -113,27 +113,28 @@ export async function mount({ canvas, points, center, options, signal, onError }
     });
     const bounds = new google.maps.LatLngBounds();
     popup = new google.maps.InfoWindow();
-    for (const point of points) {
+    for (const [index, point] of points.entries()) {
       const position = { lat: point.latitude, lng: point.longitude };
       bounds.extend(position);
       const marker = new markerLibrary.AdvancedMarkerElement({
         map,
         position,
         title: point.label,
-        gmpClickable: Boolean(point.links.length),
+        gmpClickable: true,
       });
-      if (point.links.length) {
-        marker.addEventListener(
-          "gmp-click",
-          () => {
-            const content = renderLinks(point);
-            if (!content || !map || !popup) return;
+      marker.addEventListener(
+        "gmp-click",
+        () => {
+          if (disposed || signal.aborted) return;
+          const content = renderLinks(point);
+          if (content && map && popup) {
             popup.setContent(content);
             popup.open({ map, anchor: marker, shouldFocus: true });
-          },
-          { signal: listeners.signal },
-        );
-      }
+          }
+          onSelect?.(index);
+        },
+        { signal: listeners.signal },
+      );
       markers.push(marker);
     }
     if (!center && points.length > 1) map.fitBounds(bounds, 32);

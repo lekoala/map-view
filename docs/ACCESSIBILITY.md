@@ -13,4 +13,4 @@ The component hides the open/retry control when activation starts and does not a
 
 ## Automated evidence
 
-The real MapLibre suite runs on Chromium, Firefox and WebKit. It checks Enter on a linked marker, focus on popup anchors, focusable named images for label-only markers, SDK CSS and visible attribution. This does not validate screen-reader announcements, Google markers, forced colors or application-owned focus transitions. The checklist above remains the manual release gate.
+The real MapLibre suite runs on Chromium, Firefox and WebKit. It checks Enter/Space and click selection on linked and label-only markers, button semantics, focus on popup anchors, SDK CSS and visible attribution. The demo also exercises an application-owned details dialog. Google uses `gmpClickable` for all markers and its native activation event; the API-double suite verifies selection callbacks and cleanup. These tests do not validate screen-reader announcements, real Google marker keyboard behavior, forced colors or all application-owned focus transitions. The checklist above remains the manual release gate.

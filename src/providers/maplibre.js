@@ -5,7 +5,7 @@ import { renderLinks } from "../popup.js";
 let assignedWorkerUrl = null;
 
 /** @param {ProviderContext} context */
-export async function mount({ canvas, points, center, options, signal }) {
+export async function mount({ canvas, points, center, options, signal, onSelect }) {
   if (!options.mapStyle) throw new Error("map-style is required for MapLibre");
   const {
     Map: LibreMap,
@@ -37,11 +37,13 @@ export async function mount({ canvas, points, center, options, signal }) {
   });
   /** @type {import("maplibre-gl").Marker[]} */
   const markers = [];
+  const listeners = new AbortController();
   let disposed = false;
   const dispose = () => {
     if (disposed) return;
     disposed = true;
     signal.removeEventListener("abort", abort);
+    listeners.abort();
     for (const marker of markers) marker.remove();
     map.remove();
   };
@@ -50,18 +52,38 @@ export async function mount({ canvas, points, center, options, signal }) {
   try {
     map.addControl(new NavigationControl({ showCompass: false }));
     const bounds = new LngLatBounds();
-    for (const point of points) {
+    for (const [index, point] of points.entries()) {
       const position = /** @type {[number, number]} */ ([point.longitude, point.latitude]);
       bounds.extend(position);
       const marker = new Marker().setLngLat(position).addTo(map);
-      marker.getElement().setAttribute("aria-label", point.label);
+      const element = marker.getElement();
+      element.setAttribute("aria-label", point.label);
       const content = renderLinks(point);
-      if (content) marker.setPopup(new Popup().setDOMContent(content));
-      else {
-        // Static markers are named images, not buttons with an empty action.
-        marker.getElement().setAttribute("role", "img");
-        marker.getElement().tabIndex = 0;
-      }
+      if (content)
+        marker.setPopup(
+          new Popup({ className: "map-view-popup-shell", maxWidth: "280px" }).setDOMContent(content),
+        );
+      element.setAttribute("role", "button");
+      element.tabIndex = 0;
+      element.addEventListener(
+        "click",
+        () => {
+          if (!disposed && !signal.aborted) onSelect?.(index);
+        },
+        { signal: listeners.signal },
+      );
+      element.addEventListener(
+        "keydown",
+        (event) => {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          // Own keyboard activation: preventing keypress avoids the SDK toggling twice.
+          event.preventDefault();
+          if (event.repeat || disposed || signal.aborted) return;
+          if (content) marker.togglePopup();
+          onSelect?.(index);
+        },
+        { signal: listeners.signal },
+      );
       markers.push(marker);
     }
     if (!center && points.length > 1) {

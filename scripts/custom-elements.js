@@ -37,7 +37,7 @@ const manifest = {
             { kind: "method", name: "show", description: "Explicitly activate a map" },
             { kind: "getter", name: "state", description: "Current activation status" },
           ],
-          events: [{ name: "map-view:ready" }, { name: "map-view:error" }],
+          events: [{ name: "map-view:ready" }, { name: "map-view:error" }, { name: "map-view:select" }],
         },
       ],
       exports: [

@@ -12,6 +12,7 @@ pre{white-space:pre-wrap}
 </style></head><body>
 <h1><code>&lt;map-view&gt;</code></h1>
 <p><a href="/demo/google.html">Test Google Maps with your own key</a></p>
+<p><a href="/demo/maplibre.html">Try MapLibre with a local background or your own style</a></p>
 <p>This demo runs <strong>completely offline</strong> using a deterministic demo-only adapter. It does not fetch a map SDK or tiles. Production adapters are Google and MapLibre.</p>
 <article><h2>Click to display (default)</h2>
 <map-view id="click" provider="demo" activation="click">
@@ -32,5 +33,8 @@ pre{white-space:pre-wrap}
 </map-view></article>
 <p>For real SDK maps: supply <code>map-style</code> to MapLibre or <code>api-key</code> + <code>map-id</code> to Google and load the SDK's CSS separately.</p>
 <script type="module" src="/demo/app.js"></script>
+<h2>Selected point</h2>
+<pre id="selection" aria-live="polite">No point selected.</pre>
+<script type="module" src="/demo/selection.js"></script>
 </body></html>
 

@@ -1,10 +1,11 @@
 /** A demo-only adapter: never shipped in the npm package. */
-export async function mount({ canvas, points, signal }) {
+export async function mount({ canvas, points, signal, onSelect }) {
   if (signal.aborted) return () => {};
   canvas.style.backgroundImage =
     "linear-gradient(45deg,transparent 49%,#b5c9b0 50%,transparent 51%),linear-gradient(145deg,transparent 49%,#b5c9b0 50%,transparent 51%)";
   canvas.style.backgroundSize = "110px 92px,180px 155px";
   const pinEls = [];
+  const listeners = new AbortController();
   points.forEach((point, i) => {
     const button = document.createElement("button");
     button.type = "button";
@@ -22,10 +23,16 @@ export async function mount({ canvas, points, signal }) {
         a.href = link.href;
         popup.append(a);
       }
-      button.addEventListener("click", () => {
-        popup.hidden = !popup.hidden;
-      });
-    } else button.disabled = true;
+    }
+    button.addEventListener(
+      "click",
+      () => {
+        if (signal.aborted) return;
+        if (point.links.length) popup.hidden = !popup.hidden;
+        onSelect?.(i);
+      },
+      { signal: listeners.signal },
+    );
     canvas.append(button, popup);
     pinEls.push(button, popup);
   });
@@ -33,6 +40,7 @@ export async function mount({ canvas, points, signal }) {
   return () => {
     if (disposed) return;
     disposed = true;
+    listeners.abort();
     for (const e of pinEls) e.remove();
     canvas.style.backgroundImage = "";
   };

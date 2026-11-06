@@ -203,7 +203,36 @@ export class MapViewElement extends HTMLElement {
       /** @type {ProviderMount | undefined} */
       const mount = typeof module === "function" ? module : "mount" in module ? module.mount : module.default;
       if (typeof mount !== "function") throw new TypeError(`Provider ${provider} has no mount()`);
-      const dispose = await mount({ canvas, points, center, options, signal: attempt.signal, onError: fail });
+      /** @param {number} index */
+      const onSelect = (index) => {
+        if (
+          this.#session !== session ||
+          this.#attempt !== attempt ||
+          attempt.signal.aborted ||
+          this.#state !== "ready" ||
+          !Number.isInteger(index) ||
+          index < 0 ||
+          index >= points.length
+        )
+          return;
+        const point = points[index];
+        this.dispatchEvent(
+          new CustomEvent("map-view:select", {
+            bubbles: true,
+            composed: true,
+            detail: { index, point: structuredClone(point) },
+          }),
+        );
+      };
+      const dispose = await mount({
+        canvas,
+        points,
+        center,
+        options,
+        signal: attempt.signal,
+        onError: fail,
+        onSelect,
+      });
       if (typeof dispose !== "function")
         throw new TypeError(`Provider ${provider} must return a dispose function`);
       if (attempt.signal.aborted || this.#session !== session || this.#attempt !== attempt) {
