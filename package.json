@@ -1,0 +1,95 @@
+{
+  "name": "@lekoala/map-view",
+  "version": "0.0.0",
+  "description": "Tiny declarative provider-neutral point maps with explicit lazy activation",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lekoala/map-view.git"
+  },
+  "homepage": "https://github.com/lekoala/map-view",
+  "bugs": "https://github.com/lekoala/map-view/issues",
+  "keywords": [
+    "map-view",
+    "maplibre",
+    "google-maps",
+    "web-component",
+    "lazy-loading"
+  ],
+  "customElements": "custom-elements.json",
+  "sideEffects": [
+    "./src/define.js",
+    "./src/map-view.css"
+  ],
+  "files": [
+    "src",
+    "dist/types",
+    "docs",
+    "README.md",
+    "LICENSE",
+    "custom-elements.json"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./src/index.js"
+    },
+    "./define": {
+      "types": "./dist/types/define.d.ts",
+      "import": "./src/define.js"
+    },
+    "./map-view.css": "./src/map-view.css",
+    "./providers/google": {
+      "types": "./dist/types/providers/google.d.ts",
+      "import": "./src/providers/google.js"
+    },
+    "./providers/maplibre": {
+      "types": "./dist/types/providers/maplibre.d.ts",
+      "import": "./src/providers/maplibre.js"
+    }
+  },
+  "peerDependencies": {
+    "@googlemaps/js-api-loader": "^2.0.0",
+    "maplibre-gl": "^5.0.0 || ^6.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@googlemaps/js-api-loader": {
+      "optional": true
+    },
+    "maplibre-gl": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@googlemaps/js-api-loader": "^2.0.0",
+    "@types/google.maps": "^3.58.0",
+    "@playwright/test": "1.64.0",
+    "maplibre-gl": "^5.0.0 || ^6.0.0",
+    "typescript": "7.0.2"
+  },
+  "scripts": {
+    "dev": "node test/server.js",
+    "build:types": "tsc -p tsconfig.types.json",
+    "build:manifest": "node scripts/custom-elements.js",
+    "build": "bun run build:types && bun run build:manifest",
+    "sync": "bun run build",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "typecheck": "tsc -p jsconfig.json",
+    "test": "bun test test/unit",
+    "test:types": "tsc -p test/types/tsconfig.json",
+    "test:browser": "playwright test browser --project chromium",
+    "test:browser:all": "playwright test browser",
+    "test:syntax": "node scripts/check-syntax.js",
+    "check": "bun run test:syntax && bun run lint && bun run typecheck && bun run test",
+    "check:generated": "node scripts/custom-elements.js --check",
+    "check:package": "node scripts/check-package.js",
+    "verify": "bun run check && bun run sync && bun run test:types && bun run check:generated && bun run check:package",
+    "check:all": "bun run verify && bun run test:browser:all",
+    "prepack": "bun run sync",
+    "prepublishOnly": "bun run check:all"
+  }
+}

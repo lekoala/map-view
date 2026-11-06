@@ -1,0 +1,19 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><link rel="stylesheet" href="/src/map-view.css"><style>map-view [data-map-canvas]{block-size:240px;background:#e9eee9} .hidden{display:none}</style></head><body>
+<map-view id="click" provider="fake" activation="click">
+  <button type="button" data-map-open hidden>Open</button><p data-map-loading hidden>Loading</p>
+  <div data-map-error hidden><p role="alert">Error</p><button type="button" data-map-retry>Retry</button></div>
+  <div data-map-canvas hidden></div>
+  <script type="application/json" data-map-points>[{"latitude":50.8,"longitude":4.3,"label":"A"}]</script>
+</map-view>
+<div style="height:1600px"></div>
+<map-view id="visible" provider="fake" activation="visible">
+  <div data-map-canvas hidden></div>
+  <script type="application/json" data-map-points>[{"latitude":50.8,"longitude":4.3,"label":"B"}]</script>
+</map-view>
+<map-view id="eager" provider="fake" activation="eager">
+  <div data-map-canvas hidden></div>
+  <script type="application/json" data-map-points>[{"latitude":50.8,"longitude":4.3,"label":"C"}]</script>
+</map-view>
+<script type="module" src="/test/fixtures/fixture.js"></script>
+</body></html>
+

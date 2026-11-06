@@ -1,0 +1,12 @@
+map-view {
+  display: block;
+  min-inline-size: 0;
+}
+map-view[hidden],
+map-view [hidden] {
+  display: none;
+}
+map-view [data-map-canvas] {
+  min-inline-size: 0;
+}
+/* The application MUST provide a block-size for [data-map-canvas]. */

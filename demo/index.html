@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>map-view — local demo</title><link rel="stylesheet" href="/src/map-view.css">
+<style>
+:root{color-scheme:light dark;font-family:system-ui,sans-serif}body{max-width:960px;margin:2rem auto;padding:0 1rem;line-height:1.55}
+article{border:1px solid #8886;border-radius:1rem;padding:1rem;margin-block:1.5rem}button{font:inherit;padding:.6rem 1rem;cursor:pointer}
+[data-map-canvas]{block-size:22rem;border-radius:.6rem;background:#e9eee7;color:#182c24;position:relative;overflow:hidden;border:1px solid #b4c8bb}
+.demo-pin{position:absolute;transform:translate(-50%,-100%);padding:.3rem .6rem;border-radius:2rem;background:#1662a1;color:white;border:2px solid white;box-shadow:0 2px 9px #2227}
+.demo-pin:focus-visible{outline:3px solid #e58a09;outline-offset:3px}
+.demo-links{position:absolute;inset-inline-start:1rem;inset-block-end:1rem;background:#fff;padding:.7rem;border:1px solid #789;border-radius:.5rem}
+pre{white-space:pre-wrap}
+</style></head><body>
+<h1><code>&lt;map-view&gt;</code></h1>
+<p>This demo runs <strong>completely offline</strong> using a deterministic demo-only adapter. It does not fetch a map SDK or tiles. Production adapters are Google and MapLibre.</p>
+<article><h2>Click to display (default)</h2>
+<map-view id="click" provider="demo" activation="click">
+<button type="button" data-map-open hidden>Display map</button><p role="status" data-map-loading hidden>Loading map…</p>
+<div data-map-error hidden><p role="alert">Could not load map.</p><button type="button" data-map-retry>Retry</button></div>
+<section data-map-canvas aria-label="Demo locations" hidden></section>
+<script type="application/json" data-map-points>[{"latitude":50.85,"longitude":4.35,"label":"Brussels","links":[{"label":"Example office","href":"/demo/index.html"}]},{"latitude":50.82,"longitude":4.43,"label":"Another place"}]</script>
+</map-view></article>
+<article><h2>Visible activation</h2><p>The placeholder reserves space; scrolling near it activates the adapter.</p>
+<map-view id="visible" provider="demo" activation="visible">
+<p role="status" data-map-loading hidden>Loading…</p><div data-map-error hidden>Map unavailable.</div><section data-map-canvas aria-label="Visible demo map" hidden></section>
+<script type="application/json" data-map-points>[{"latitude":50.87,"longitude":4.36,"label":"Visible marker"}]</script>
+</map-view></article>
+<article><h2>Eager activation</h2>
+<map-view id="eager" provider="demo" activation="eager">
+<p role="status" data-map-loading hidden>Loading…</p><div data-map-error hidden>Map unavailable.</div><section data-map-canvas aria-label="Eager demo map" hidden></section>
+<script type="application/json" data-map-points>[]</script><script type="application/json" data-map-center>{"latitude":50.85,"longitude":4.35}</script>
+</map-view></article>
+<p>For real SDK maps: supply <code>map-style</code> to MapLibre or <code>api-key</code> + <code>map-id</code> to Google and load the SDK's CSS separately.</p>
+<script type="module" src="/demo/app.js"></script>
+</body></html>
+

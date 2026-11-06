@@ -1,0 +1,47 @@
+export type MapCoordinate = {
+    latitude: number;
+    longitude: number;
+};
+export type MapLink = {
+    href: string;
+    label: string;
+};
+export type MapPoint = MapCoordinate & {
+    label: string;
+    links: MapLink[];
+};
+export type MapOptions = {
+    mapStyle: string | undefined;
+    workerUrl: string | undefined;
+    apiKey: string | undefined;
+    mapId: string | undefined;
+    zoom: number;
+    maxZoom: number;
+    language: string | undefined;
+    region: string | undefined;
+};
+export type ProviderContext = {
+    canvas: HTMLElement;
+    points: MapPoint[];
+    center: MapCoordinate | null;
+    options: MapOptions;
+    signal: AbortSignal;
+    onError: (error: unknown) => void;
+};
+export type ProviderMount = (context: ProviderContext) => Promise<() => void>;
+export type ProviderLoader = () => Promise<{
+    mount: ProviderMount;
+} | {
+    default: ProviderMount;
+} | ProviderMount>;
+/**
+ * Public, engine-independent data contract. There is no universal map API.
+ * @typedef {{latitude: number, longitude: number}} MapCoordinate
+ * @typedef {{href: string, label: string}} MapLink
+ * @typedef {MapCoordinate & {label: string, links: MapLink[]}} MapPoint
+ * @typedef {{mapStyle: string | undefined, workerUrl: string | undefined, apiKey: string | undefined, mapId: string | undefined, zoom: number, maxZoom: number, language: string | undefined, region: string | undefined}} MapOptions
+ * @typedef {{canvas: HTMLElement, points: MapPoint[], center: MapCoordinate | null, options: MapOptions, signal: AbortSignal, onError: (error: unknown) => void}} ProviderContext
+ * @typedef {(context: ProviderContext) => Promise<() => void>} ProviderMount
+ * @typedef {() => Promise<{mount: ProviderMount} | {default: ProviderMount} | ProviderMount>} ProviderLoader
+ */
+export {};

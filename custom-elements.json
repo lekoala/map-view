@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "2.1.0",
+  "readme": "README.md",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/map-view.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "name": "MapViewElement",
+          "tagName": "map-view",
+          "attributes": [
+            {
+              "name": "provider"
+            },
+            {
+              "name": "activation"
+            },
+            {
+              "name": "zoom"
+            },
+            {
+              "name": "max-zoom"
+            },
+            {
+              "name": "timeout"
+            },
+            {
+              "name": "lang"
+            },
+            {
+              "name": "region"
+            },
+            {
+              "name": "api-key"
+            },
+            {
+              "name": "map-id"
+            },
+            {
+              "name": "map-style"
+            },
+            {
+              "name": "worker-url"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "registerProvider",
+              "static": true,
+              "description": "Register lazy provider loader"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "description": "Explicitly activate a map"
+            },
+            {
+              "kind": "getter",
+              "name": "state",
+              "description": "Current activation status"
+            }
+          ],
+          "events": [
+            {
+              "name": "map-view:ready"
+            },
+            {
+              "name": "map-view:error"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MapViewElement",
+          "declaration": {
+            "name": "MapViewElement",
+            "module": "src/map-view.js"
+          }
+        }
+      ]
+    }
+  ]
+}

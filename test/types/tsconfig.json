@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["es2022", "dom"],
+    "strict": true,
+    "noEmit": true,
+    "paths": {
+      "@lekoala/map-view": ["../../dist/types/index.d.ts"]
+    }
+  },
+  "include": ["consumer.ts"]
+}
