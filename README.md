@@ -1,17 +1,12 @@
 # @lekoala/map-view
 
-**In development — 0.0.0, not published.** Small declarative point maps with interchangeable **engines** (Google Maps, MapLibre, future custom adapters), explicit lazy activation, and no universal map API.
+Small declarative point maps with interchangeable **engines** (Google Maps, MapLibre, future custom adapters), explicit lazy activation, and no universal map API.
 
 The JavaScript entry points run in a browser with DOM globals. Server-side applications can render the HTML, then import the component on the client; importing it during SSR is unsupported.
-
 
 ## Install for development
 
 Requires Bun 1.4.4 (the setup validation version). Run `bun install --frozen-lockfile` and `bun run check`. Then `bun run dev` and visit http://127.0.0.1:4867/demo/index.html. Browser tests require `bunx playwright install` (or a suitable Playwright container).
-
-The package is deliberately `private: true` until implementation and verification are complete. **Publish 0.1 only after all release gates pass.** See [docs/ROADMAP.md](docs/ROADMAP.md).
-
-The v0.1 release preparation, validated behavior and remaining manual/CI gates are recorded in [docs/RELEASE.md](docs/RELEASE.md).
 
 ## Declarative usage
 
