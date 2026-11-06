@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>map-view — Google manual test</title>
+  <link rel="stylesheet" href="/src/map-view.css">
+  <style>
+    body { max-width: 900px; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; }
+    fieldset { display: grid; gap: .75rem; margin-bottom: 1rem; }
+    input, button { font: inherit; padding: .5rem; }
+    [data-map-canvas] { height: 420px; }
+  </style>
+  <script type="importmap">{"imports":{"@googlemaps/js-api-loader":"/node_modules/@googlemaps/js-api-loader/dist/index.js"}}</script>
+</head>
+<body>
+  <h1>Google Maps manual test</h1>
+  <p><a href="/demo/index.html">Offline demo</a></p>
+  <p>Enter your Maps Demo Key or development API key. Google requests start when you select Load map.
+    The key is not saved in browser storage or the page URL. Reload the page to change credentials after loading.</p>
+  <form id="credentials" autocomplete="off">
+    <fieldset>
+      <legend>Google configuration</legend>
+      <label for="api-key">API key</label>
+      <input id="api-key" name="api-key" type="password" required autocomplete="off">
+      <label for="map-id">Map ID (optional; defaults to DEMO_MAP_ID)</label>
+      <input id="map-id" name="map-id" value="DEMO_MAP_ID" placeholder="DEMO_MAP_ID">
+      <button type="submit">Load map</button>
+    </fieldset>
+  </form>
+  <p id="result" role="status">Waiting for a key.</p>
+  <map-view id="google" provider="google" max-zoom="15" region="BE">
+    <p data-map-loading role="status" hidden>Loading Google Maps…</p>
+    <div data-map-error hidden>
+      <p id="error-message" role="alert">Could not load Google Maps.</p>
+      <button type="button" data-map-retry>Retry</button>
+    </div>
+    <section data-map-canvas aria-label="Example locations" tabindex="-1" hidden></section>
+    <script type="application/json" data-map-points>[{"latitude":50.85,"longitude":4.35,"label":"Office","links":[{"label":"Office details","href":"/demo/index.html"}]},{"latitude":50.82,"longitude":4.43,"label":"Park"}]</script>
+  </map-view>
+  <p>Check the Office marker and its link using the keyboard, the Park label, initial framing,
+    attribution and teardown. Developer tools show loader and authentication errors.</p>
+  <script type="module" src="/demo/google.js"></script>
+</body>
+</html>

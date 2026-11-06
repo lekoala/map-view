@@ -24,6 +24,14 @@ bun run check:package
 - `maplibre.spec.js`: real installed MapLibre SDK and worker served locally through a native importmap; no provider/SDK/style/tile requests before click, missing-style failure, recoverable HTTP 500 tiles, CSS, attribution, keyboard popups, static markers, zoom framing and cleanup. Test-only SDK observation is not a component API.
 - `google.spec.js`: local API double for loader ownership, idle listener cleanup, authentication-hook chaining/restoration and canvas style restoration. This does not replace real Google integration with a controlled key.
 
+## Manual Google demo
+
+Run `bun run dev`, open `http://127.0.0.1:4867/demo/google.html`, paste your own Maps Demo Key and keep `DEMO_MAP_ID` for testing. Select Load map. The local importmap resolves the installed loader; the adapter loads Google's remote SDK only after activation. Reload to change credentials because loader configuration is page-global.
+
+[Google's Maps Demo Key guide](https://developers.google.com/maps/documentation/javascript/demo-key) explains how to obtain a key using an eligible personal Google Account without billing information. Demo keys support maps, markers and info windows, with daily usage limits; they are for prototyping. `DEMO_MAP_ID` is a test Map ID, not an API key.
+
+Check marker keyboard behavior (linked and label-only), popup links, initial framing, visible attribution and error reporting. Record real-SDK results separately from the API-double suite. The demo does not store credentials in browser storage or URLs.
+
 ## CI/release
 
 CI runs verification on Ubuntu and Windows, then browser tests on Chromium, Firefox and WebKit in a Playwright container. Both jobs use Bun 1.4.4 and frozen lockfile installs.

@@ -33,6 +33,10 @@ Installed SDKs: Google loader 2.1.3, Google types 3.66.9 and MapLibre 6.16.0. Ma
 - [ ] Confirm CI results on Ubuntu and Windows; local results are not a CI run.
 - [ ] Set version 0.1.0 and remove private only after all release gates pass.
 
+## Potential after 0.1
+
+- [ ] Consider an optional Leaflet adapter when a concrete consumer needs raster point maps without WebGL. Keep the tile URL and attribution explicit, preserve lazy loading and the existing provider contract. This is not a 0.1 release requirement.
+
 ## Out of scope
 
 Clustering, geocoding, arbitrary HTML popups, dynamic fetching, location picking, routing, feature/layer APIs, universal cameras, automatic failover and bundled SDKs.
