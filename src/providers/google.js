@@ -61,7 +61,7 @@ function configureLoader(requested, loader) {
 }
 
 /** @param {ProviderContext} context */
-export async function mount({ canvas, points, center, options, signal, onError, onSelect }) {
+export async function mount({ canvas, points, center, options, signal, onError, onSelect, renderMarker }) {
   if (!options.apiKey || !options.mapId) throw new Error("Google requires api-key and map-id");
   const loader = await import("@googlemaps/js-api-loader");
   if (signal.aborted) return () => {};
@@ -122,6 +122,9 @@ export async function mount({ canvas, points, center, options, signal, onError, 
         title: point.label,
         gmpClickable: true,
       });
+      markers.push(marker);
+      const visual = renderMarker?.(point, index);
+      if (visual) marker.append(visual);
       marker.addEventListener(
         "gmp-click",
         () => {
@@ -135,7 +138,6 @@ export async function mount({ canvas, points, center, options, signal, onError, 
         },
         { signal: listeners.signal },
       );
-      markers.push(marker);
     }
     if (!center && points.length > 1) map.fitBounds(bounds, 32);
     // Import resolution is not first paint. Wait for the initial idle event.

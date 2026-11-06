@@ -1,4 +1,33 @@
 map-view {
+  --map-view-font-family: system-ui, sans-serif;
+  --map-view-focus-color: #1754a3;
+  --map-view-focus-width: 2px;
+  --map-view-focus-offset: 2px;
+  --map-view-popup-background: #fff;
+  --map-view-popup-color: #203047;
+  --map-view-popup-min-width: 160px;
+  --map-view-popup-max-width: 280px;
+  --map-view-popup-font-size: 14px;
+  --map-view-popup-line-height: 1.5;
+  --map-view-popup-padding: 16px;
+  --map-view-popup-radius: 12px;
+  --map-view-popup-shadow: 0 8px 28px #152b4930;
+  --map-view-popup-title-size: 15px;
+  --map-view-popup-title-weight: 650;
+  --map-view-popup-title-gap: 10px;
+  --map-view-popup-link-gap: 6px;
+  --map-view-popup-link-padding: 8px 10px;
+  --map-view-popup-link-radius: 6px;
+  --map-view-popup-link-background: #edf4ff;
+  --map-view-popup-link-hover-background: #deebff;
+  --map-view-popup-link-color: #1754a3;
+  --map-view-popup-link-weight: 500;
+  --map-view-popup-close-size: 24px;
+  --map-view-popup-close-inset: 5px;
+  --map-view-popup-close-radius: 50%;
+  --map-view-popup-close-color: #526174;
+  --map-view-popup-close-hover-background: #edf4ff;
+  --map-view-popup-close-font-size: 20px;
   display: block;
   min-inline-size: 0;
 }
@@ -12,56 +41,75 @@ map-view [data-map-canvas] {
 /* The application MUST provide a block-size for [data-map-canvas]. */
 
 map-view .map-view-popup {
-  min-inline-size: 160px;
-  color: #203047;
-  font:
-    400 14px / 1.5 system-ui,
-    sans-serif;
+  min-inline-size: var(--map-view-popup-min-width);
+  max-inline-size: var(--map-view-popup-max-width);
+  background: var(--map-view-popup-background);
+  color: var(--map-view-popup-color);
+  font: 400 var(--map-view-popup-font-size) / var(--map-view-popup-line-height) var(--map-view-font-family);
   overflow-wrap: anywhere;
 }
 map-view .map-view-popup-title {
-  margin: 0 20px 10px 0;
-  font-size: 15px;
-  font-weight: 650;
+  margin: 0 var(--map-view-popup-close-size) var(--map-view-popup-title-gap) 0;
+  font-size: var(--map-view-popup-title-size);
+  font-weight: var(--map-view-popup-title-weight);
 }
 map-view .map-view-popup-links {
   display: grid;
-  gap: 6px;
+  gap: var(--map-view-popup-link-gap);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 map-view .map-view-popup-links a {
   display: block;
-  padding: 8px 10px;
-  border-radius: 6px;
-  background: #edf4ff;
-  color: #1754a3;
-  font-weight: 500;
+  padding: var(--map-view-popup-link-padding);
+  border-radius: var(--map-view-popup-link-radius);
+  background: var(--map-view-popup-link-background);
+  color: var(--map-view-popup-link-color);
+  font-weight: var(--map-view-popup-link-weight);
   text-decoration: none;
 }
 map-view .map-view-popup-links a:hover {
-  background: #deebff;
+  background: var(--map-view-popup-link-hover-background);
   text-decoration: underline;
 }
-map-view .map-view-popup-links a:focus-visible {
-  outline: 2px solid #1754a3;
-  outline-offset: 2px;
+map-view .map-view-popup-links a:focus-visible,
+map-view .map-view-popup-shell .maplibregl-popup-close-button:focus-visible {
+  outline: var(--map-view-focus-width) solid var(--map-view-focus-color);
+  outline-offset: var(--map-view-focus-offset);
 }
 /* The MapLibre adapter opts into this chrome through Popup.className. */
 map-view .map-view-popup-shell .maplibregl-popup-content {
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 8px 28px #152b4930;
+  padding: var(--map-view-popup-padding);
+  background: var(--map-view-popup-background);
+  border-radius: var(--map-view-popup-radius);
+  box-shadow: var(--map-view-popup-shadow);
 }
 map-view .map-view-popup-shell .maplibregl-popup-close-button {
-  inset-block-start: 5px;
-  inset-inline-end: 5px;
-  inline-size: 24px;
-  block-size: 24px;
-  border-radius: 50%;
-  color: #526174;
-  font:
-    20px / 1 system-ui,
-    sans-serif;
+  inset-block-start: var(--map-view-popup-close-inset);
+  inset-inline-end: var(--map-view-popup-close-inset);
+  inline-size: var(--map-view-popup-close-size);
+  block-size: var(--map-view-popup-close-size);
+  border-radius: var(--map-view-popup-close-radius);
+  color: var(--map-view-popup-close-color);
+  font: var(--map-view-popup-close-font-size) / 1 var(--map-view-font-family);
+}
+map-view .map-view-popup-shell .maplibregl-popup-close-button:hover {
+  background: var(--map-view-popup-close-hover-background);
+}
+map-view .map-view-popup-shell.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+map-view .map-view-popup-shell.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+map-view .map-view-popup-shell.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+  border-bottom-color: var(--map-view-popup-background);
+}
+map-view .map-view-popup-shell.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+map-view .map-view-popup-shell.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+map-view .map-view-popup-shell.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+  border-top-color: var(--map-view-popup-background);
+}
+map-view .map-view-popup-shell.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: var(--map-view-popup-background);
+}
+map-view .map-view-popup-shell.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: var(--map-view-popup-background);
 }

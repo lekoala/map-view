@@ -36,3 +36,7 @@ Tests register a deterministic fake provider. The offline demo registers its own
 
 Adapters report marker activation through `onSelect(index)`. The core emits `map-view:select` with a copied normalized point and its index in the activation snapshot, only for the live ready attempt. All markers are selectable, including those without links. Built-in link popups remain adapter-owned. Optional JSON `data` belongs to the application and is never rendered as popup HTML automatically. Dialogs and record lookup belong to consumers.
 
+## D10 — DOM marker visuals and host theme variables
+
+`renderMarker(point, index)` provides only appearance as a fresh detached HTMLElement. It is snapshotted at activation and receives copied point data. Adapters own interaction containers, positioning and SDK resources. Reuse/invalid returns fail the attempt rather than moving application DOM. Package popup styles use CSS custom properties declared on `map-view`; custom marker styling belongs to the application. No engine-specific marker configuration or objects enter the shared API.
+

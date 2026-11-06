@@ -18,6 +18,7 @@ export type MapSelectDetail = {
     point: MapPoint;
     index: number;
 };
+export type RenderMarker = (point: MapPoint, index: number) => HTMLElement;
 export type MapOptions = {
     mapStyle: string | undefined;
     workerUrl: string | undefined;
@@ -36,6 +37,7 @@ export type ProviderContext = {
     signal: AbortSignal;
     onError: (error: unknown) => void;
     onSelect?: (index: number) => void;
+    renderMarker?: RenderMarker;
 };
 export type ProviderMount = (context: ProviderContext) => Promise<() => void>;
 export type ProviderLoader = () => Promise<{
@@ -50,8 +52,9 @@ export type ProviderLoader = () => Promise<{
  * @typedef {null | boolean | number | string | JsonValue[] | {[key: string]: JsonValue}} JsonValue
  * @typedef {MapCoordinate & {label: string, links: MapLink[], data?: JsonValue}} MapPoint
  * @typedef {{point: MapPoint, index: number}} MapSelectDetail
+ * @typedef {(point: MapPoint, index: number) => HTMLElement} RenderMarker
  * @typedef {{mapStyle: string | undefined, workerUrl: string | undefined, apiKey: string | undefined, mapId: string | undefined, zoom: number, maxZoom: number, language: string | undefined, region: string | undefined}} MapOptions
- * @typedef {{canvas: HTMLElement, points: MapPoint[], center: MapCoordinate | null, options: MapOptions, signal: AbortSignal, onError: (error: unknown) => void, onSelect?: (index: number) => void}} ProviderContext
+ * @typedef {{canvas: HTMLElement, points: MapPoint[], center: MapCoordinate | null, options: MapOptions, signal: AbortSignal, onError: (error: unknown) => void, onSelect?: (index: number) => void, renderMarker?: RenderMarker}} ProviderContext
  * @typedef {(context: ProviderContext) => Promise<() => void>} ProviderMount
  * @typedef {() => Promise<{mount: ProviderMount} | {default: ProviderMount} | ProviderMount>} ProviderLoader
  */

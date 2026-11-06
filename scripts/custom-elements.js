@@ -1,6 +1,10 @@
 import { readFileSync, writeFileSync } from "node:fs";
 
 const path = "custom-elements.json";
+const cssProperties = Array.from(
+  readFileSync("src/map-view.css", "utf8").matchAll(/^\s*(--map-view-[\w-]+):\s*([^;]+);/gm),
+  ([, name, value]) => ({ name, default: value.trim() }),
+);
 const attributes = [
   "provider",
   "activation",
@@ -27,6 +31,7 @@ const manifest = {
           name: "MapViewElement",
           tagName: "map-view",
           attributes: attributes.map((name) => ({ name })),
+          cssProperties,
           members: [
             {
               kind: "method",
@@ -36,6 +41,12 @@ const manifest = {
             },
             { kind: "method", name: "show", description: "Explicitly activate a map" },
             { kind: "getter", name: "state", description: "Current activation status" },
+            {
+              kind: "field",
+              name: "renderMarker",
+              type: { text: "RenderMarker | null" },
+              description: "Application marker appearance, snapshotted at activation",
+            },
           ],
           events: [{ name: "map-view:ready" }, { name: "map-view:error" }, { name: "map-view:select" }],
         },

@@ -1,6 +1,8 @@
 import "/src/define.js";
+import { setupAppearance } from "./appearance.js";
 
 const map = document.querySelector("#google");
+setupAppearance(map);
 const form = document.querySelector("#credentials");
 const result = document.querySelector("#result");
 

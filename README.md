@@ -57,6 +57,8 @@ mapView.addEventListener("map-view:select", ({ detail: { point, index } }) => {
 
 Try `/demo/maplibre.html` for the real local MapLibre engine, a selection log and a metadata-driven details dialog. The default background makes no tile requests; a custom style URL is an explicit choice in the demo. `/demo/google.html` shows selection events with your Google key.
 
+Set `mapView.renderMarker = (point, index) => HTMLElement` before activation to supply custom marker visuals. Theme popup colors, spacing, corners and focus with `--map-view-*` CSS variables on the host. Both demos offer numbered markers and live theme presets. See [docs/THEMING.md](docs/THEMING.md) for examples and all variables.
+
 `activation` modes:
 
 - `click` (default): absolutely no provider import, SDK, style or tile request before a click or `mapView.show()`.

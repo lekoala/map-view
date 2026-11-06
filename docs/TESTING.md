@@ -26,6 +26,7 @@ bun run check:package
 - `google-demo.spec.js`: real installed loader in the demo, without Node globals. The remote SDK request is intercepted to verify deferred loading and the authentication error UI without sending a real key.
 - `select.spec.js`: normalized selection data, event flags, defensive metadata copies, stale callback rejection and real MapLibre click/Enter/Space activation.
 - `maplibre-demo.spec.js`: real MapLibre demo remains local/lazy and renders selected metadata in an application-owned dialog.
+- `custom-marker.spec.js`: real MapLibre custom DOM, keyboard/popup preservation, invalid returns/cleanup, renderer snapshots and stale cancellation, live CSS-variable overrides and demo themes. Google custom DOM and activation are covered by the API-double suite.
 
 ## MapLibre demo
 

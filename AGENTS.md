@@ -34,6 +34,8 @@ This repository implements a small provider-neutral HTML point map. Keep it smal
 
 The core also supplies optional `onSelect(index)` for marker activation. Report the snapshot index, never SDK objects. The core emits copied normalized point data only for the live ready attempt. Application metadata belongs in optional JSON `point.data`; it is not popup HTML.
 
+Optional `renderMarker(point, index)` returns application-owned visual DOM. The core snapshots/validates the callback and its fresh detached elements; adapters own accessible interaction wrappers, SDK placement and teardown. Themeable package CSS values use host `--map-view-*` custom properties.
+
 - Google: `setOptions()` and `gm_authFailure` are page-global; first loader config must be stable. Wait for meaningful first render, not only `importLibrary`.
 - MapLibre: `worker-url` is global if set, map style is required; do not imply a tile provider. Initial style load is a readiness barrier. Keep attribution visible and marker popups keyboard-usable.
 - Optional peers must not enter the core bundle/import graph until activation.

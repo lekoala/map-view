@@ -22,6 +22,9 @@ function disposeSafely(dispose) {
 
 /** A small declarative, provider-neutral point map. Not a map engine. */
 export class MapViewElement extends HTMLElement {
+  /** Optional application-owned marker appearance. Snapshotted at activation.
+   * @public @type {import("./contract.js").RenderMarker | null} */
+  renderMarker = null;
   /** @type {AbortController | null} */
   #session = null;
   /** @type {AbortController | null} */
@@ -196,6 +199,29 @@ export class MapViewElement extends HTMLElement {
         language: this.closest("[lang]")?.getAttribute("lang") || document.documentElement.lang || undefined,
         region: this.getAttribute("region") ?? undefined,
       };
+      const renderer = this.renderMarker;
+      if (renderer != null && typeof renderer !== "function") {
+        throw new TypeError("renderMarker must be a function or null");
+      }
+      const rendered = new WeakSet();
+      /** @type {import("./contract.js").RenderMarker | undefined} */
+      const renderMarker = renderer
+        ? (_point, index) => {
+            const current = () =>
+              this.#session === session && this.#attempt === attempt && !attempt.signal.aborted;
+            if (!current()) throw new DOMException("Map activation cancelled", "AbortError");
+            if (!Number.isInteger(index) || index < 0 || index >= points.length) {
+              throw new TypeError("Invalid marker index");
+            }
+            const element = renderer(structuredClone(points[index]), index);
+            if (!current()) throw new DOMException("Map activation cancelled", "AbortError");
+            if (!(element instanceof HTMLElement) || element.parentNode || rendered.has(element)) {
+              throw new TypeError("renderMarker must return a new detached HTMLElement for each point");
+            }
+            rendered.add(element);
+            return element;
+          }
+        : undefined;
       // Timeout starts before the first dynamic import, not inside the SDK.
       this.#timer = setTimeout(() => fail(new Error("Map activation timed out")), timeout);
       const module = await loader();
@@ -232,6 +258,7 @@ export class MapViewElement extends HTMLElement {
         signal: attempt.signal,
         onError: fail,
         onSelect,
+        renderMarker,
       });
       if (typeof dispose !== "function")
         throw new TypeError(`Provider ${provider} must return a dispose function`);

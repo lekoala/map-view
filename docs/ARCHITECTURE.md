@@ -16,6 +16,8 @@ The core is deliberately agnostic to markers implementations. It passes normaliz
 
 Marker activation is reported as `onSelect(index)`. The core validates the live ready attempt and emits `map-view:select` with a copied normalized point and its snapshot index. Optional JSON metadata in `point.data` is application-owned. No SDK objects cross this event boundary.
 
+Optional `element.renderMarker` is snapshotted at activation and passed through a validated provider-context callback. Application code receives copied data and returns fresh detached DOM content. Adapters wrap it in their own accessible SDK marker. Styles remain application-owned; package popup themes inherit CSS variables declared on the host. CSS themes can change live without changing the activation snapshot.
+
 ## State machine
 
 `idle` -> `loading` -> `ready` or `error`. `error` -> `loading` through retry. `disconnect` -> teardown + `idle` (fresh session after reconnect).

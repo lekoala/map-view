@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>map-view — MapLibre demo</title>
   <link rel="stylesheet" href="/src/map-view.css">
+  <link rel="stylesheet" href="/demo/appearance.css">
   <link rel="stylesheet" href="/node_modules/maplibre-gl/dist/maplibre-gl.css">
   <style>
     body { max-width: 960px; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; }
@@ -31,6 +32,11 @@
       </select>
       <label for="style-url">Style URL (optional override)</label>
       <input id="style-url" name="style" placeholder="/demo/local-maplibre-style.json">
+      <label for="marker-appearance">Markers</label>
+      <select id="marker-appearance">
+        <option value="default">SDK default</option>
+        <option value="numbered">Custom numbered markers</option>
+      </select>
       <p>Choose an online background for streets and place names, or enter your own style URL.
         Online styles contact external services after Load map.
         Reload this page to change the style after loading.</p>
@@ -40,6 +46,8 @@
   <p>Backgrounds: <a href="https://openfreemap.org/">OpenFreeMap</a> · <a href="https://lfmaps.fr/en/">LFMaps</a>.
     Map data attribution is displayed on the map.</p>
   <p id="result" role="status">Waiting to load.</p>
+  <label for="theme">Popup and marker theme (can change while mounted)</label>
+  <select id="theme"><option value="default">Default</option><option value="plum">Plum</option><option value="dark">Dark</option></select>
   <map-view id="maplibre" provider="maplibre" map-style="/demo/local-maplibre-style.json"
             worker-url="/node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs" max-zoom="13">
     <p data-map-loading role="status" hidden>Loading MapLibre…</p>

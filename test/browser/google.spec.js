@@ -4,6 +4,42 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/test/fixtures/google.html");
 });
 
+test("Google uses custom DOM while preserving marker activation and cleanup", async ({ page }) => {
+  await page.evaluate(async () => {
+    const { mount } = await import("/src/providers/google.js");
+    window.__selected = [];
+    window.__mounted = mount({
+      canvas: document.querySelector("#canvas"),
+      points: [{ latitude: 0, longitude: 0, label: "Office", links: [] }],
+      center: { latitude: 0, longitude: 0 },
+      options: { apiKey: "test", mapId: "test", zoom: 12, maxZoom: 15 },
+      signal: new AbortController().signal,
+      onError() {},
+      onSelect: (index) => window.__selected.push(index),
+      renderMarker: (point, index) => {
+        const marker = document.createElement("span");
+        marker.className = "google-custom-marker";
+        marker.textContent = `${point.label} ${index}`;
+        return marker;
+      },
+    });
+  });
+  await expect.poll(() => page.evaluate(() => window.__markers?.length)).toBe(1);
+  await page.evaluate(async () => {
+    window.__idle();
+    window.__dispose = await window.__mounted;
+  });
+  await expect(page.locator(".google-custom-marker")).toHaveText("Office 0");
+  await page.evaluate(() => window.__markers[0].dispatchEvent(new Event("gmp-click")));
+  expect(await page.evaluate(() => window.__selected)).toEqual([0]);
+  expect(await page.evaluate(() => [window.__markers[0].title, window.__markers[0].gmpClickable])).toEqual([
+    "Office",
+    true,
+  ]);
+  await page.evaluate(() => window.__dispose());
+  await expect(page.locator(".google-custom-marker")).toHaveCount(0);
+});
+
 test("Google selects linked and label-only markers and removes selection listeners on dispose", async ({
   page,
 }) => {

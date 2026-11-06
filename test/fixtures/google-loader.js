@@ -48,6 +48,7 @@ export async function importLibrary(name) {
     return {
       Map: class {
         constructor(canvas) {
+          this.canvas = canvas;
           canvas.style.position = "relative";
           window.__maps.push(this);
         }
@@ -55,6 +56,10 @@ export async function importLibrary(name) {
     };
   return {
     AdvancedMarkerElement: class extends EventTarget {
+      append(element) {
+        this.children = [element];
+        this.map.canvas.append(element);
+      }
       constructor(options) {
         super();
         Object.assign(this, options);

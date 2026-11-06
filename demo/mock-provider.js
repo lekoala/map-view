@@ -1,5 +1,5 @@
 /** A demo-only adapter: never shipped in the npm package. */
-export async function mount({ canvas, points, signal, onSelect }) {
+export async function mount({ canvas, points, signal, onSelect, renderMarker }) {
   if (signal.aborted) return () => {};
   canvas.style.backgroundImage =
     "linear-gradient(45deg,transparent 49%,#b5c9b0 50%,transparent 51%),linear-gradient(145deg,transparent 49%,#b5c9b0 50%,transparent 51%)";
@@ -10,7 +10,10 @@ export async function mount({ canvas, points, signal, onSelect }) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "demo-pin";
-    button.textContent = point.label;
+    const visual = renderMarker?.(point, i);
+    if (visual) button.append(visual);
+    else button.textContent = point.label;
+    button.setAttribute("aria-label", point.label);
     button.style.left = `${30 + (i % 4) * 25}%`;
     button.style.top = `${35 + (i % 2) * 30}%`;
     const popup = document.createElement("div");

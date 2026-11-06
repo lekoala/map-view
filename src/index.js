@@ -5,6 +5,7 @@ export { normalizeCenter, normalizeCoordinate, normalizePoints } from "./validat
 /** @typedef {import("./contract.js").MapLink} MapLink */
 /** @typedef {import("./contract.js").MapPoint} MapPoint */
 /** @typedef {import("./contract.js").MapSelectDetail} MapSelectDetail */
+/** @typedef {import("./contract.js").RenderMarker} RenderMarker */
 /** @typedef {import("./contract.js").JsonValue} JsonValue */
 /** @typedef {import("./contract.js").MapOptions} MapOptions */
 /** @typedef {import("./contract.js").ProviderContext} ProviderContext */

@@ -4,6 +4,9 @@ export type MapOptions = import("./contract.js").MapOptions;
 /** A small declarative, provider-neutral point map. Not a map engine. */
 export declare class MapViewElement extends HTMLElement {
     #private;
+    /** Optional application-owned marker appearance. Snapshotted at activation.
+     * @public @type {import("./contract.js").RenderMarker | null} */
+    renderMarker: import("./contract.js").RenderMarker | null;
     /** @public Register a lazy provider loader. A registered name may override a built-in provider.
      * @param {string} name @param {ProviderLoader} loader */
     static registerProvider(name: string, loader: ProviderLoader): void;

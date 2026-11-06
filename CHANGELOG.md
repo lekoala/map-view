@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add snapshotted `renderMarker(point, index)` DOM callbacks for both adapters, preserving accessible selection and popups.
+- Expose host CSS variables for popup colors, fonts, spacing, sizing, corners, shadows and focus; add live theme and numbered-marker demo examples.
+
 - Restyle linked-marker popups with a title, compact link cards, rounded MapLibre chrome and visible keyboard focus.
 - Offer explicit OpenFreeMap and LFMaps backgrounds in the MapLibre demo.
 

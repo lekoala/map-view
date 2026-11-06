@@ -5,7 +5,7 @@ import { renderLinks } from "../popup.js";
 let assignedWorkerUrl = null;
 
 /** @param {ProviderContext} context */
-export async function mount({ canvas, points, center, options, signal, onSelect }) {
+export async function mount({ canvas, points, center, options, signal, onSelect, renderMarker }) {
   if (!options.mapStyle) throw new Error("map-style is required for MapLibre");
   const {
     Map: LibreMap,
@@ -55,13 +55,21 @@ export async function mount({ canvas, points, center, options, signal, onSelect 
     for (const [index, point] of points.entries()) {
       const position = /** @type {[number, number]} */ ([point.longitude, point.latitude]);
       bounds.extend(position);
-      const marker = new Marker().setLngLat(position).addTo(map);
+      const visual = renderMarker?.(point, index);
+      const container = visual ? document.createElement("div") : undefined;
+      if (container && visual) container.append(visual);
+      const marker = new Marker(container ? { element: container, anchor: "bottom" } : {})
+        .setLngLat(position)
+        .addTo(map);
       const element = marker.getElement();
       element.setAttribute("aria-label", point.label);
       const content = renderLinks(point);
       if (content)
         marker.setPopup(
-          new Popup({ className: "map-view-popup-shell", maxWidth: "280px" }).setDOMContent(content),
+          new Popup({
+            className: "map-view-popup-shell",
+            maxWidth: "var(--map-view-popup-max-width, 280px)",
+          }).setDOMContent(content),
         );
       element.setAttribute("role", "button");
       element.tabIndex = 0;

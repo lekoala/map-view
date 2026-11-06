@@ -21,7 +21,8 @@
 - [x] Verify HTTP 500 tile errors during initial loading remain recoverable while missing styles fail activation.
 - [x] Cover import deadlines, hidden visible layouts, center-only maps, activation snapshots and fatal errors after readiness.
 - [x] Cover supported provider module shapes, ready-event flags and old callbacks/completions after a newer attempt succeeds.
-- [x] Local validation: 7 unit tests, public type tests, generated files, 96 browser tests across Chromium/Firefox/WebKit and package validation.
+- [x] Local validation: 7 unit tests, public type tests, generated files, 120 browser tests across Chromium/Firefox/WebKit and package validation.
+- [x] Custom marker DOM via snapshotted `renderMarker(point, index)`, validation/cleanup and host CSS theme variables; see `THEMING.md` and the demo appearance controls.
 
 Installed SDKs: Google loader 2.1.3, Google types 3.66.9 and MapLibre 6.16.0. MapLibre support is deliberately limited to `^6.16.0`; version 5 is not claimed as supported. Google API-double tests exercise lifecycle behavior but do not validate the remote SDK.
 

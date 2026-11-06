@@ -5,6 +5,7 @@ import type {
   ProviderContext,
   ProviderLoader,
   ProviderMount,
+  RenderMarker,
 } from "@lekoala/map-view";
 import { MapViewElement, normalizePoints } from "@lekoala/map-view";
 
@@ -15,6 +16,12 @@ void places;
 MapViewElement.registerProvider("fake", async () => ({ mount: async () => () => {} }));
 
 const point: MapPoint = { ...places[0], data: { id: 42, tags: ["office"] } };
+const renderer: RenderMarker = (point, index) => {
+  const el = document.createElement("span");
+  el.textContent = `${point.label} ${index}`;
+  return el;
+};
+document.createElement("map-view").renderMarker = renderer;
 const adapter: ProviderMount = async (context: ProviderContext) => {
   const options: MapOptions = context.options;
   void options;

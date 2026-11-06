@@ -45,6 +45,124 @@
               "name": "worker-url"
             }
           ],
+          "cssProperties": [
+            {
+              "name": "--map-view-font-family",
+              "default": "system-ui, sans-serif"
+            },
+            {
+              "name": "--map-view-focus-color",
+              "default": "#1754a3"
+            },
+            {
+              "name": "--map-view-focus-width",
+              "default": "2px"
+            },
+            {
+              "name": "--map-view-focus-offset",
+              "default": "2px"
+            },
+            {
+              "name": "--map-view-popup-background",
+              "default": "#fff"
+            },
+            {
+              "name": "--map-view-popup-color",
+              "default": "#203047"
+            },
+            {
+              "name": "--map-view-popup-min-width",
+              "default": "160px"
+            },
+            {
+              "name": "--map-view-popup-max-width",
+              "default": "280px"
+            },
+            {
+              "name": "--map-view-popup-font-size",
+              "default": "14px"
+            },
+            {
+              "name": "--map-view-popup-line-height",
+              "default": "1.5"
+            },
+            {
+              "name": "--map-view-popup-padding",
+              "default": "16px"
+            },
+            {
+              "name": "--map-view-popup-radius",
+              "default": "12px"
+            },
+            {
+              "name": "--map-view-popup-shadow",
+              "default": "0 8px 28px #152b4930"
+            },
+            {
+              "name": "--map-view-popup-title-size",
+              "default": "15px"
+            },
+            {
+              "name": "--map-view-popup-title-weight",
+              "default": "650"
+            },
+            {
+              "name": "--map-view-popup-title-gap",
+              "default": "10px"
+            },
+            {
+              "name": "--map-view-popup-link-gap",
+              "default": "6px"
+            },
+            {
+              "name": "--map-view-popup-link-padding",
+              "default": "8px 10px"
+            },
+            {
+              "name": "--map-view-popup-link-radius",
+              "default": "6px"
+            },
+            {
+              "name": "--map-view-popup-link-background",
+              "default": "#edf4ff"
+            },
+            {
+              "name": "--map-view-popup-link-hover-background",
+              "default": "#deebff"
+            },
+            {
+              "name": "--map-view-popup-link-color",
+              "default": "#1754a3"
+            },
+            {
+              "name": "--map-view-popup-link-weight",
+              "default": "500"
+            },
+            {
+              "name": "--map-view-popup-close-size",
+              "default": "24px"
+            },
+            {
+              "name": "--map-view-popup-close-inset",
+              "default": "5px"
+            },
+            {
+              "name": "--map-view-popup-close-radius",
+              "default": "50%"
+            },
+            {
+              "name": "--map-view-popup-close-color",
+              "default": "#526174"
+            },
+            {
+              "name": "--map-view-popup-close-hover-background",
+              "default": "#edf4ff"
+            },
+            {
+              "name": "--map-view-popup-close-font-size",
+              "default": "20px"
+            }
+          ],
           "members": [
             {
               "kind": "method",
@@ -61,6 +179,14 @@
               "kind": "getter",
               "name": "state",
               "description": "Current activation status"
+            },
+            {
+              "kind": "field",
+              "name": "renderMarker",
+              "type": {
+                "text": "RenderMarker | null"
+              },
+              "description": "Application marker appearance, snapshotted at activation"
             }
           ],
           "events": [

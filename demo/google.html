@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>map-view — Google manual test</title>
   <link rel="stylesheet" href="/src/map-view.css">
+  <link rel="stylesheet" href="/demo/appearance.css">
   <style>
     body { max-width: 900px; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; }
     fieldset { display: grid; gap: .75rem; margin-bottom: 1rem; }
@@ -26,10 +27,14 @@
       <input id="api-key" name="api-key" type="password" required autocomplete="off">
       <label for="map-id">Map ID (optional; defaults to DEMO_MAP_ID)</label>
       <input id="map-id" name="map-id" value="DEMO_MAP_ID" placeholder="DEMO_MAP_ID">
+      <label for="marker-appearance">Markers</label>
+      <select id="marker-appearance"><option value="default">SDK default</option><option value="numbered">Custom numbered markers</option></select>
       <button type="submit">Load map</button>
     </fieldset>
   </form>
   <p id="result" role="status">Waiting for a key.</p>
+  <label for="theme">Popup and marker theme (can change while mounted)</label>
+  <select id="theme"><option value="default">Default</option><option value="plum">Plum</option><option value="dark">Dark</option></select>
   <map-view id="google" provider="google" max-zoom="15" region="BE">
     <p data-map-loading role="status" hidden>Loading Google Maps…</p>
     <div data-map-error hidden>

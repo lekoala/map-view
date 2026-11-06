@@ -1,0 +1,37 @@
+map-view[data-theme="plum"] {
+  --map-view-popup-link-color: #6b247a;
+  --map-view-popup-link-background: #f7edf9;
+  --map-view-popup-link-hover-background: #eed9f3;
+  --map-view-focus-color: #9c38ab;
+  --map-view-popup-radius: 18px;
+  --demo-marker-background: #6b247a;
+}
+map-view[data-theme="dark"] {
+  --map-view-popup-background: #202938;
+  --map-view-popup-color: #eef2f7;
+  --map-view-popup-link-color: #cee5ff;
+  --map-view-popup-link-background: #31425b;
+  --map-view-popup-link-hover-background: #415776;
+  --map-view-popup-close-color: #d0dae8;
+  --map-view-popup-close-hover-background: #415776;
+  --map-view-focus-color: #ffc76b;
+  --demo-marker-background: #202938;
+}
+.demo-numbered-marker {
+  display: grid;
+  place-items: center;
+  inline-size: 34px;
+  block-size: 34px;
+  border: 2px solid var(--demo-marker-border, #fff);
+  border-radius: 50%;
+  background: var(--demo-marker-background, #1754a3);
+  color: var(--demo-marker-color, #fff);
+  font:
+    650 15px / 1 system-ui,
+    sans-serif;
+  box-shadow: 0 3px 10px #152b4940;
+}
+map-view [role="button"]:focus-visible .demo-numbered-marker {
+  outline: var(--map-view-focus-width) solid var(--map-view-focus-color);
+  outline-offset: var(--map-view-focus-offset);
+}

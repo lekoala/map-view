@@ -1,6 +1,8 @@
 import "/src/define.js";
+import { setupAppearance } from "./appearance.js";
 
 const map = document.querySelector("#maplibre");
+setupAppearance(map);
 const form = document.querySelector("#style-form");
 const result = document.querySelector("#result");
 form.addEventListener("submit", (event) => {

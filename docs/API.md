@@ -39,6 +39,7 @@ Optional `data` carries arbitrary JSON metadata for the consuming application: o
 - `MapViewElement.registerProvider(name, () => import("./adapter.js"))` — register lazy loader, optionally overriding a built-in.
 - `element.show()` — request activation programmatically (also works with `activation="click"`).
 - `element.state` — read-only `idle|loading|ready|error`.
+- `element.renderMarker` — synchronous `(point, index) => HTMLElement` callback or `null` for default SDK markers. Assign after definition and before activation; the callback is snapshotted per attempt. See [THEMING.md](THEMING.md) for fresh-node requirements and host CSS variables.
 
 Events bubble, are composed and are not cancelable:
 
@@ -63,14 +64,17 @@ Provider contract:
 Provider-specific settings are validated inside the adapter, including replacements registered under a built-in name. `mount()` must resolve to a function; any other result fails activation. Cleanup functions must be idempotent. Cleanup exceptions are logged to the console and cannot block error reporting, teardown or later sessions.
 
 ```js
-export async function mount({ canvas, points, center, options, signal, onError, onSelect }) {
+export async function mount({ canvas, points, center, options, signal, onError, onSelect, renderMarker }) {
   // Create SDK resources and return when first paint is usable.
   // Respect signal, and report only fatal asynchronous errors via onError(error).
   // On marker activation, call onSelect?.(index) with its index in points.
+  // For custom visuals, use renderMarker?.(point, index) inside your SDK marker.
   return () => { /* release everything, idempotently */ };
 }
 ```
 
 `onSelect` is an optional callback for adapter interoperability. The core supplies it and validates the index/session before emitting the public event. Adapters own pointer/keyboard activation and must remove their listeners on disposal. Never pass SDK markers or raw SDK events into this callback.
+
+Optional `renderMarker` supplies application-owned marker content, validated by the core. Adapters still own positioning, accessible interaction containers, popups and cleanup. The public `RenderMarker` type is exported from the package root.
 
 API omissions are intentional: there are no public setters to mutate points, map camera APIs, clustering options, free-form HTML bubbles, geolocation, geocoding or remote `src` loading.
