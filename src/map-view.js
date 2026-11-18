@@ -7,8 +7,10 @@ import { normalizeCenter, normalizePoints, numberAttribute, readJsonScript } fro
 /** @type {Map<string, ProviderLoader>} */
 const providerLoaders = new Map();
 // Imports remain inside callbacks: importing map-view NEVER imports a provider.
-providerLoaders.set("maplibre", () => import("./providers/maplibre.js"));
-providerLoaders.set("google", () => import("./providers/google.js"));
+// Keep literal `await import()`: Symfony's jsDelivr ESM resolver
+// uses this form to discover and rewrite lazy dependencies.
+providerLoaders.set("maplibre", async () => await import("./providers/maplibre.js"));
+providerLoaders.set("google", async () => await import("./providers/google.js"));
 
 /** Cleanup failures must not interrupt lifecycle transitions or affect newer attempts.
  * @param {() => void} dispose */

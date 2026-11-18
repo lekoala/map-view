@@ -45,6 +45,13 @@ function targets(entry) {
 }
 for (const target of [...Object.values(pkg.exports).flatMap(targets), ...pkg.sideEffects])
   if (!files.includes(target.slice(2))) problems.push(`unresolved export/sideEffect: ${target}`);
+// jsDelivr +esm builds and Symfony's jsDelivr ESM resolver only discover dynamic
+// imports written literally as `await import("...")`. Guard that textual contract.
+const core = readFileSync("src/map-view.js", "utf8");
+for (const provider of ["maplibre", "google"]) {
+  if (!core.includes(`await import("./providers/${provider}.js")`))
+    problems.push(`src/map-view.js: provider "${provider}" must keep the literal await import() shape`);
+}
 if (problems.length) {
   console.error(problems.join("\n"));
   process.exitCode = 1;
